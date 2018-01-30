@@ -153,8 +153,33 @@ public void writeTextAppend (String text) {
    
   
 
-
-
+public String  getDataFromLineIndex (int line, int index) { // directly get single, separated text from selected line
+//          
+            int separatorIndexStart =0;// rezoved begining of the text position    
+            int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+            int textIndex = 0;  // count each index of text bitween separator
+            String SeparatedText = "";
+            
+            if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
+            {
+                    
+                System.out.println("last point: " + dataStringHolder.get(line).indexOf(separator)); // -1 is return when no separator is found
+                    
+                    while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                    {
+                        separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                        separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+                        
+                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                 SeparatedText = dataStringHolder.get(0).substring(separatorIndexStart+1,separatorIndexEnd);
+                            }
+                             System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+textIndex+ ", output:["+SeparatedText+"]");
+                             
+                             textIndex++;
+                    }
+            }
+        return SeparatedText;
+   }
 
 
 
