@@ -174,19 +174,19 @@ public String  getDataFromLineIndex (int line, int index) {
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
-                        
+                        System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+(textIndex+1)+ ", output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"]");
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                   if (textIndex == index){ // only save text when needet
                                        SeparatedText = dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd); // only job is to get text from bouth separators
                                        break; // break if find what user want. 
                                   }
-                                 ++textIndex; // add text was counted
+                                 ++textIndex; // last text was counted
                             }
                             
                          
                                 
-                            System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+textIndex+ ", output:["+SeparatedText+"]");
+                           
                              
                             
                             
