@@ -211,7 +211,6 @@ public int getLineIndexLenght(int line) {
             
             if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
             {
-               textIndex = 0; // reset state from negative one , to enable correct addition of indexes     
                  
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
