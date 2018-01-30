@@ -168,18 +168,20 @@ public String  getDataFromLineIndex (int line, int index) {
             if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
             {
                     
-               
                     
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
-                        System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+(textIndex+1)+ ", output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"]");
+
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                
+                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex)+ ", user-index:"+index+",user-found = "+(textIndex == index ? "yes":"no"));
+                                  
                                   if (textIndex == index){ // only save text when needet
                                        SeparatedText = dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd); // only job is to get text from bouth separators
-                                       break; // break if find what user want. 
+                                        return SeparatedText; // break and return if find what user want. 
                                   }
                                  ++textIndex; // last text was counted
                             }
