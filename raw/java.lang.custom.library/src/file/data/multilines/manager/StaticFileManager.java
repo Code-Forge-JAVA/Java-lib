@@ -12,10 +12,11 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.FileReader;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import java.util.Vector;
+
 
 
 
@@ -30,12 +31,16 @@ public class StaticFileManager {
     private File fileSystem; // file check
     private FileWriter outputStream; 
     private BufferedWriter bufferWrite;
-    private Vector<String> dataStringHolder = new Vector<String>(); // store new data in string format
+    // store new data in string format
+    final private ArrayList<String> dataStringHolder;
+    public ArrayList<ArrayList<String>> dataOut = new ArrayList<ArrayList<String>>();
+    public ArrayList<String> dataIns = new ArrayList<>();  // 'dataIns'ide goes inside into 'dataOut'side and work like sub array
     
     
     
     // Constructor 
  public   StaticFileManager (String filename){
+        this.dataStringHolder = new ArrayList<>();
        this.filename = filename;
        fileSystem = new File(filename);
        separator = "~"; // sentence point separator 
@@ -123,18 +128,38 @@ public void writeTextAppend (String text) {
 
 
    // Rezolve string that get from file into separate
-   public String  resolveDataStructure () {
-            int line=0;
+   public void  resolveDataStructure () {
+//            int line=0;
             
-             int separatorIndexStart =0;// rezoved begining of the text position    
-            int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-            int textIndex = 0;  // count each index of text between separators
-            String SeparatedText = "";
+           
+//            dataOut.add(dataIns); // add first list
             
-            if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
+             
+//                  dataIns.clear();
+//                  dataOut.clear();
+                  
+            
+
+             
+             for (int line=0; dataStringHolder.size() > line;line++ ) // 0 is equal that no text in file 
             {
                     
+                    // if outside array is smaller then curently file data lines ammount then add new array block. Equlize  each RAR and EEPROM side of data. 
+//                    if (dataStringHolder.size()> dataOut.size()){
+                        dataOut.add(dataIns); //add new array structure
+                        dataIns = new ArrayList<>(); // create a new inner list that has the same content as 
+//                    }
+                        System.out.println("size: "+dataOut.size()  );
                     
+                    System.out.println("Break Line: "+line);
+                     
+                    //Declarate each time new variables and values
+                        int separatorIndexStart =0;// rezoved begining of the text position    
+                        int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+                        int textIndex = 0;  // count each index of text between separators
+                        String SeparatedText = "";
+                     
+                     
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
@@ -145,8 +170,8 @@ public void writeTextAppend (String text) {
                                 
                                System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex));
                                   
-                                       SeparatedText = dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd); // only job is to get text from bouth separators
-                                  
+                                      dataIns.add( dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd) ); // only job is to get text from bouth separators
+                                       
                                         ++textIndex; // last text was counted
                             }
                             
@@ -154,18 +179,35 @@ public void writeTextAppend (String text) {
                              
                     }
             }
-        return SeparatedText;
+             
+             System.out.println("OuterArraiySize: "+dataOut.size());
+             System.out.println("Output: "+dataOut);
    }
    
-  
+  public String getDataFromVectorLineIndex (int line, int index){
+      
+      
+      if (dataStringHolder.size()> dataOut.size() | true) // minimum inspection that memory log doesn't not constructed yet
+          resolveDataStructure ();
+          
+      
+      System.out.println("Size of structure array: "+dataOut.size());
+      System.out.println("Pointer size: "+dataOut.get(line).size() );
+      
+      
+      if (dataOut.size() > line && dataOut.get(line).size() > index | true) // protect from outranged values from user input
+          return dataOut.get(line).get(index);
+      else
+          return "-1";
+  }
    
-// Directly get single, separated text from selected line
+// Directly get single, separated text from selected line from RAM dataStringHolder
 public String  getDataFromLineIndex (int line, int index) { 
 //          
             int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
             int textIndex = 0;  // count each index of text between separators
-            String SeparatedText = "";
+            String SeparatedText="";
             
             if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
             {
@@ -201,7 +243,7 @@ public String  getDataFromLineIndex (int line, int index) {
    }
 
 
-
+// get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
 public int getLineIndexLenght(int line) {
 
             int separatorIndexStart =0;// rezoved begining of the text position    
@@ -232,7 +274,12 @@ public int getLineIndexLenght(int line) {
 }
 
 
-
+ // get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
+public int getLinesLenght() {
+    
+     return dataStringHolder.size();
+     
+}
 
 
 
