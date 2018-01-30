@@ -208,10 +208,11 @@ public int getLineIndexLenght(int line) {
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
             int textIndex = 0;  // count each index of text between separators
             
+            
             if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
             {
-                    
-                    
+               textIndex = 0; // reset state from negative one , to enable correct addition of indexes     
+                 
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
@@ -227,9 +228,8 @@ public int getLineIndexLenght(int line) {
                     }
             }
 
-    System.out.println("line: "+line+", getLineIndexLenght:"+textIndex);        
-    
-    return textIndex;
+    System.out.println("function: getLineIndexLenght(int line):  line: "+line+", lenght:"+(textIndex == 0 ? "-1":textIndex) );        
+       if (textIndex == 0) return -1; else return textIndex; // if fail to find separator, fix value from zero to minus one,else return finded indexes
 }
 
 
