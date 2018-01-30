@@ -124,58 +124,73 @@ public void writeTextAppend (String text) {
    
    // Rezolve string that get from file into separate
    public String  resolveDataStructure () {
-//          
+            int line=0;
+            
             int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-            int textIndex = 0;  // count each index of text bitween separator
+            int textIndex = 0;  // count each index of text between separators
             String SeparatedText = "";
             
             if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
             {
                     
-                System.out.println("last point: " + dataStringHolder.get(0).indexOf(separator)); // -1 is return when no separator is found
-                    
-                    while (separatorIndexEnd != -1 )
-                    {
-                        separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
-                        separatorIndexEnd = dataStringHolder.get(0).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
-                        
-                            if (separatorIndexEnd != -1) {
-                                 SeparatedText = dataStringHolder.get(0).substring(separatorIndexStart+1,separatorIndexEnd);
-                            }
-                             System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+textIndex+ ", output:["+SeparatedText+"]");
-                             
-                             textIndex++;
-                    }
-            }
-        return SeparatedText;
-   }
-   
-  
-
-public String  getDataFromLineIndex (int line, int index) { // directly get single, separated text from selected line
-//          
-            int separatorIndexStart =0;// rezoved begining of the text position    
-            int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-            int textIndex = 0;  // count each index of text bitween separator
-            String SeparatedText = "";
-            
-            if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
-            {
-                    
-                System.out.println("last point: " + dataStringHolder.get(line).indexOf(separator)); // -1 is return when no separator is found
+               
                     
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
                         
+                        
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
-                                 SeparatedText = dataStringHolder.get(0).substring(separatorIndexStart+1,separatorIndexEnd);
+                                 SeparatedText = dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd); // only job is to get text from bouth separators
+                                 ++textIndex; // add text was counted
                             }
                              System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+textIndex+ ", output:["+SeparatedText+"]");
                              
-                             textIndex++;
+                            
+                            
+                             
+                    }
+            }
+        return SeparatedText;
+   }
+   
+  
+// Directly get single, separated text from selected line
+public String  getDataFromLineIndex (int line, int index) { 
+//          
+            int separatorIndexStart =0;// rezoved begining of the text position    
+            int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+            int textIndex = 0;  // count each index of text between separators
+            String SeparatedText = "";
+            
+            if (dataStringHolder.size() > 0 ) // 0 is equal that no text in file 
+            {
+                    
+               
+                    
+                    while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                    {
+                        separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                        separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+                        
+                        
+                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                  if (textIndex == index){ // only save text when needet
+                                       SeparatedText = dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd); // only job is to get text from bouth separators
+                                       break; // break if find what user want. 
+                                  }
+                                 ++textIndex; // add text was counted
+                            }
+                            
+                         
+                                
+                            System.out.println("Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" text index counted: "+textIndex+ ", output:["+SeparatedText+"]");
+                             
+                            
+                            
+                             
                     }
             }
         return SeparatedText;
