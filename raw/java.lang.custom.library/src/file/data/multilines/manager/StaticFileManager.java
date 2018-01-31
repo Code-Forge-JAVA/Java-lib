@@ -169,7 +169,50 @@ public void writeTextAppend (String text) {
        
    }
    
+   /**
+    * By the given line , detach data from the dataHolder(line) raw string and separate sub-data vector points by given range. 
+    * @param line Specify column from the data vector.
+    * @param start Where start to catch data.
+    * @param end   End of catched data.
+    * @return  Provide vector with separated sub-data that was specified range 'start->end' to do that.
+    */
+ public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
    
+      int separatorIndexStart =0;// rezoved begining of the text position    
+            int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+            int textIndex = 0;  // count each index of text between separators
+            Vector<String> SeparatedTextVector = new Vector();
+            
+            if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
+            {
+                    
+                    
+                    while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                    {
+                        separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                        separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+
+                        
+                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                
+//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
+                                     if (start <= textIndex & textIndex <= end ) // cath in data in specified range
+                                     {
+                                        SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
+                                     }
+                                   ++textIndex; // last text was counted
+                            }
+                            
+                             
+                    }
+            }else {
+                 System.err.println("getLineVectorSpecifiedSize line out of range ");
+                 } 
+            
+        return SeparatedTextVector;
+       
+       
+   }   
 
 /**
  * By the given line , detach data from the dataHolder(line) raw string and separate into single string of sub-data. 
