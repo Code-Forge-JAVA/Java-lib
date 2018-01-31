@@ -25,7 +25,6 @@ import java.util.Vector;
  * 
  * @author Zilvinus Peciulis
  * @version 1.0 Build 8704 Jan 31 , 2018
- * @param 'filename' requare to provide file name or full path of the file , also create new file
  */
 public class StaticFileManager {
     
@@ -40,7 +39,9 @@ public class StaticFileManager {
     public Vector<String> dataIns = new Vector<>();  // 'dataIns'ide goes inside into 'dataOut'side and work like sub array
     
     
- 
+ /**
+  * @param filename require to provide file name or full path of the file , also created a new file
+  */
     
  public   StaticFileManager (String filename){
        this.dataStringHolder = new Vector<>();
@@ -51,7 +52,11 @@ public class StaticFileManager {
        
     }
     
-** 
+ /**
+  * 
+  * @param text write text into file
+  */
+ 
 public void writeText (String text) {
         try {
              outputStream = new FileWriter(filename);                      
@@ -81,7 +86,7 @@ public void writeTextAppend (String text) {
         }
 };
 
- public boolean fileExist() {
+ public boolean isFileExist() {
      if (fileSystem.exists())
          System.out.println("File '"+filename+"' exist.");
      else
@@ -92,10 +97,9 @@ public void writeTextAppend (String text) {
     
  
  
- // main and only updater as reader from data file 
  /**
-  *Main and only updater as reader from data file 
-  * @return Store and update data in dataStringHolder vector
+  *Main and only updater that job is to get all data from file and store into dataStringHolder vector to use as a buffer in this class
+  * @since  //Store and update data in dataStringHolder vector
   */
    public void readInFileUpdater() {
 
@@ -124,6 +128,11 @@ public void writeTextAppend (String text) {
    
    
    // return whole block from the raw line into separated units to use later
+   /**
+    * By the given line , detach data from the dataHolder(line) raw string and separate sub-data vector points. 
+    * @param line Specify column from the data vector.
+    * @return Contain vector with separated data.
+    */
    public Vector getLineVector(int line) {
    
       int separatorIndexStart =0;// rezoved begining of the text position    
@@ -161,8 +170,13 @@ public void writeTextAppend (String text) {
    }
    
    
-// Directly get single, separated text from selected line from RAM dataStringHolder
-// return directly wanted value from specified line and row index    
+
+/**
+ * By the given line , detach data from the dataHolder(line) raw string and separate into single string of sub-data. 
+ * @param line Specify column from the data vector.
+ * @param index Specify position in column row.
+ * @return Separated single string of sub-data.
+ */   
 public String  getDataFromLineIndex (int line, int index) { 
 //         
          
@@ -203,14 +217,12 @@ public String  getDataFromLineIndex (int line, int index) {
    }
 
 
-// get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
-/**
-*Return components amount in wanted line
- ..general description
- * @author Zilvinus
- * @return "Give line lenght of the row"
-*/
 
+/**
+ * In specified column , count each sub-data points.
+ * @param line Given argument are use to specific line. 
+ * @return Contains length each sub-data points.
+ */
 public int getLineRowComponentsLenght(int line) {
 
             int separatorIndexStart =0;// rezoved begining of the text position    
@@ -241,6 +253,10 @@ public int getLineRowComponentsLenght(int line) {
 
 
  // get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
+/**
+ * Get total lines stored in data as length.
+ * @return  Provide total amount of the column
+ */
 public int getLinesLenght() {
     
      return dataStringHolder.size();
