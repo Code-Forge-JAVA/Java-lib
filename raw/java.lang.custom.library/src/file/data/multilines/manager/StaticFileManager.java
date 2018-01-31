@@ -14,6 +14,7 @@ import java.io.FileReader;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import java.util.Vector;
 
@@ -34,9 +35,14 @@ public class StaticFileManager {
     private FileWriter outputStream; 
     private BufferedWriter bufferWrite;
     // store new data in string format
-    final private Vector<String> dataStringHolder;
-    public Vector<Vector<String>> dataOut = new Vector<Vector<String>>();
-    public Vector<String> dataIns = new Vector<>();  // 'dataIns'ide goes inside into 'dataOut'side and work like sub array
+    final private Vector<String> dataStringHolder; 
+   // Pattern example of dataStringHolder
+    //1: John~Cruger~6849~   
+    //2: Sethom~Colem~2597~ 
+    //3: Rober~Salam~5764~   
+    
+//    public Vector<Vector<String>> dataOut = new Vector<Vector<String>>();
+//    public Vector<String> dataIns = new Vector<>();  // 'dataIns'ide goes inside into 'dataOut'side and work like sub array
     
     
  /**
@@ -70,6 +76,99 @@ public void writeText (String text) {
         }
 };
 
+
+public void setLineRow (String text,  int line , int index){
+    
+    String combinedData=""; // buffer data~data2~
+    
+    if (dataStringHolder.isEmpty())
+        {
+                readInFileUpdater();
+        }    
+    
+        Vector<String> dataVector = new Vector<>(); 
+                   int dataVectorLenght =getLineRowComponentsLenght(line);
+                      dataVector =  getLineVector(line);
+                      
+    
+        if (dataStringHolder.size() > line) // combine in existing data
+        {
+            
+            System.err.println("Line is okey");
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                             {
+                                    if (index == column) // Set new Value
+                                    {
+                                        combinedData+=text+separator;
+
+                                        System.out.println("cath:"+combinedData);
+                                    }else // generate separators until new value
+                                    {
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                              combinedData+= dataVector.get(column)+separator;
+                                          else
+                                              combinedData+=separator;
+                                        System.out.println("separator:"+combinedData);
+                                    }
+                             }
+                        
+        }else // if no data that exist and can be replased then generate empty lines until reach wanted line and set new data containing constructed string into it.
+            {
+                   
+                System.err.println("Size: "+dataStringHolder.size()); 
+                    for (int column = dataStringHolder.size()  ; column  <= line; column++) // generate emty string in this block
+                        {
+                              System.out.println("Generate: "+column);
+                              dataStringHolder.add(""); // push emty string in while not right spot.
+                              
+                        }
+                            //-------------//
+                            
+                                System.out.println("Set new data ");
+                             
+                             for (int column = 0; column < (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                             {
+                                    if (index == column) // Set new Value
+                                    {
+                                        combinedData+=text+separator;
+
+                                        System.out.println("cath:"+combinedData);
+                                    }else // generate separators until new value
+                                    {
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                              combinedData+= dataVector.get(column)+separator;
+                                          else
+                                              combinedData+=separator;
+                                        System.out.println("separator:"+combinedData);
+                                    }
+                             }
+            }
+       
+             dataStringHolder.set(line, combinedData); // replace constructed string into data storing vector
+             System.out.println("Rezult "+dataStringHolder.get(line));
+                      
+//
+////                     dataStringHolder.remove(0);
+//                     dataStringHolder.set(0, "AHAHAHAHAHHAH");
+//                     
+//                     dataStringHolder.add("GOLVE JOKER");
+//                     System.out.println("Remove initiated:----------------");
+//                    for (int i = 0; i < dataStringHolder.size(); i++) 
+//                        {
+//                                System.out.println("Line: "+i+ " "+dataStringHolder.get(i));
+//                        }  
+                     
+//    dataStringHolder.add("param1");
+//    dataStringHolder.add("param2");
+//    dataStringHolder.add("param3");
+//     System.out.println("setLineRow: "+dataStringHolder);
+//     dataStringHolder.add(0, "ButterFly");
+//     System.out.println("setLineRow: "+dataStringHolder);
+//     
+//     System.err.println("custom : "+dataStringHolder.get(line));
+};
+
+
 public void writeTextAppend (String text) {
      
 //      BufferedWriter bw = null;
@@ -91,6 +190,7 @@ public void writeTextAppend (String text) {
          System.out.println("File '"+filename+"' exist.");
      else
          System.out.println("Unable to find file '"+filename+"' existence.");
+     
      return fileSystem.exists();
  }
  
@@ -143,7 +243,8 @@ public void writeTextAppend (String text) {
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
             {
                     
-                    
+                 
+                  
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
@@ -162,6 +263,7 @@ public void writeTextAppend (String text) {
                     }
             }else {
                  System.err.println("getLineVector line out of range ");
+    //              throw new ArrayIndexOutOfBoundsException(line);
                  } 
             
         return SeparatedTextVector;
@@ -174,7 +276,7 @@ public void writeTextAppend (String text) {
     * @param line Specify column from the data vector.
     * @param start Where start to catch data.
     * @param end   End of catched data.
-    * @return  Provide vector with separated sub-data that was specified range 'start->end' to do that.
+    * @return  Provide vector with separated sub-data that was in specified range 'start->end' to do that.
     */
  public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
    
@@ -196,7 +298,7 @@ public void writeTextAppend (String text) {
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
 //                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
-                                     if (start <= textIndex & textIndex <= end ) // cath in data in specified range
+                                     if (start <= textIndex & textIndex < end ) // cath in data in specified range
                                      {
                                         SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
                                      }
@@ -207,6 +309,7 @@ public void writeTextAppend (String text) {
                     }
             }else {
                  System.err.println("getLineVectorSpecifiedSize line out of range ");
+                //  throw new ArrayIndexOutOfBoundsException(line);
                  } 
             
         return SeparatedTextVector;
@@ -253,7 +356,11 @@ public String  getDataFromLineIndex (int line, int index) {
                             
                            
                     }
-            } System.err.println("getDataFromLineIndex line out of range");       
+            } else {
+                System.err.println("getDataFromLineIndex line out of range");   
+            //     throw new ArrayIndexOutOfBoundsException(line);    
+            }
+            
                    
            
         return SeparatedText;
@@ -264,7 +371,7 @@ public String  getDataFromLineIndex (int line, int index) {
 /**
  * In specified column , count each sub-data points.
  * @param line Given argument are use to specific line. 
- * @return Contains length each sub-data points.
+ * @return Contains length each sub-data points. If wail return -1
  */
 public int getLineRowComponentsLenght(int line) {
 
@@ -289,7 +396,10 @@ public int getLineRowComponentsLenght(int line) {
                          
                              
                     }
-            }else System.err.println("getLineIndexLenght line out of range");
+            }else {
+                System.err.println("getLineIndexLenght line out of range");
+//                 throw new ArrayIndexOutOfBoundsException(line);    
+            }
 
        if (textIndex == 0) return -1; else return textIndex; // if fail to find separator, fix value from zero to minus one,else return finded indexes
 }
@@ -306,6 +416,13 @@ public int getLinesLenght() {
      
 }
 
+
+public void displayDataMap() 
+{
+    for (int line = 0; line < dataStringHolder.size(); line++) {
+        System.out.println(line+" "+dataStringHolder.get(line) );
+    }
+}
 
 
 
