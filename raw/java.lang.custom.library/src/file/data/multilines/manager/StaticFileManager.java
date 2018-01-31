@@ -21,8 +21,11 @@ import java.util.Vector;
 
 
 /**
- *
- * @author zick
+ *Local file manipulation as data storage in  simple data.txt file.
+ * 
+ * @author Zilvinus Peciulis
+ * @version 1.0 Build 8704 Jan 31 , 2018
+ * @param 'filename' requare to provide file name or full path of the file , also create new file
  */
 public class StaticFileManager {
     
@@ -37,10 +40,10 @@ public class StaticFileManager {
     public Vector<String> dataIns = new Vector<>();  // 'dataIns'ide goes inside into 'dataOut'side and work like sub array
     
     
+ 
     
-    // Constructor 
  public   StaticFileManager (String filename){
-        this.dataStringHolder = new Vector<>();
+       this.dataStringHolder = new Vector<>();
        this.filename = filename;
        fileSystem = new File(filename);
        separator = "~"; // sentence point separator 
@@ -48,6 +51,7 @@ public class StaticFileManager {
        
     }
     
+** 
 public void writeText (String text) {
         try {
              outputStream = new FileWriter(filename);                      
@@ -89,7 +93,10 @@ public void writeTextAppend (String text) {
  
  
  // main and only updater as reader from data file 
- 
+ /**
+  *Main and only updater as reader from data file 
+  * @return Store and update data in dataStringHolder vector
+  */
    public void readInFileUpdater() {
 
                 try(BufferedReader br = new BufferedReader(new FileReader(filename))) 
