@@ -88,9 +88,9 @@ public void writeTextAppend (String text) {
     
  
  
- // main updater as reader from data file 
+ // main and only updater as reader from data file 
  
-   public void readLineIn() {
+   public void readInFileUpdater() {
 
                 try(BufferedReader br = new BufferedReader(new FileReader(filename))) 
                 {    
@@ -155,6 +155,7 @@ public void writeTextAppend (String text) {
    
    
 // Directly get single, separated text from selected line from RAM dataStringHolder
+// return directly wanted value from specified line and row index    
 public String  getDataFromLineIndex (int line, int index) { 
 //         
          
@@ -196,7 +197,14 @@ public String  getDataFromLineIndex (int line, int index) {
 
 
 // get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
-public int getLineIndexLenght(int line) {
+/**
+*Return components amount in wanted line
+ ..general description
+ * @author Zilvinus
+ * @return "Give line lenght of the row"
+*/
+
+public int getLineRowComponentsLenght(int line) {
 
             int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
