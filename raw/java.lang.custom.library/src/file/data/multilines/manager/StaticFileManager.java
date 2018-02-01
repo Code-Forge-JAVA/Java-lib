@@ -79,12 +79,12 @@ private void writeText (String text) {
 
 /**
  * Set data in specific row and in specific column.
- * Must be use uploadInFile() method to take effect.
- * @param text Put data.
+ * Must be use uploadInFile() method to take effect globally.
  * @param line Where row would be placed 
  * @param index Where column would be placed
+ * @param text Put data.
  */
-public void setRowCollumn (String text,  int line , int index){
+public void setRowCollumn (  int line , int index,String text){
     
     String combinedData=""; // buffer data~data2~
     
@@ -97,9 +97,11 @@ public void setRowCollumn (String text,  int line , int index){
         if (dataStringHolder.size() > line) // combine in existing data
         {
             
-            System.err.println("Line is okey");
+//            System.err.println("Line is okey");
                     for (int column = 0; column < (Integer.max(dataVectorLenght, index+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
+                                    
+//                                   System.out.println("Data Lines: "+(index ) +", column:"+column+ ", index: "+index );  
                                     if (index == column) 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
@@ -126,7 +128,7 @@ public void setRowCollumn (String text,  int line , int index){
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add(""); // push emty string in while not right spot.
+                              dataStringHolder.add("_"); // push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -135,6 +137,8 @@ public void setRowCollumn (String text,  int line , int index){
                              
                              for (int column = 0; column <= ( index); column++) // in column firstly generate separators then put new data
                              {
+//                                  System.out.println("Jump Lines: "+ (index ) +", column:"+column+ ", index: "+index );   
+                                 
                                     if (index == column) // Set new Value
                                     {
                                         combinedData+=text+separator;
@@ -160,6 +164,14 @@ public void setRowCollumn (String text,  int line , int index){
 
 };
 
+/**
+ * Set data in specific row and in specific column.
+ * Must be use uploadInFile() method to take effect globally.
+ * Can handle multiple sub-data in same column.
+ * @param line Where row would be placed 
+ * @param index Where column would be start to be placed
+ * @param multitext Put multiple data.
+ */
 public void setRowCollumnSub (  int line , int index ,String ...multitext){
     
     String combinedData=""; // buffer data~data2~
@@ -168,16 +180,16 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
         int dataVectorLenght =getLineColumnComponentsLenght(line);
            dataVector =  getLineVector(line);
         int multtextcountPos = 0;
-           System.out.println("multtextcountPos Len : "+multtextcountPos);   
+//           System.out.println("multtextcountPos Len : "+multtextcountPos);   
                         
         if (dataStringHolder.size() > line) // combine in existing data
         {
             
-            System.err.println("Line is okey");
+//            System.err.println("Line is okey");
                     for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
                                     
-                                   System.out.println("Data Lines: "+(index + multtextcountPos) + ", index: "+index+", multilines:"+multtextcountPos );
+//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
                                     
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // keep tracking multi text arguments where must be replaced 
                                             // Set new Value
@@ -185,18 +197,18 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                                              
                                                   combinedData+=multitext[multtextcountPos]+separator;
                                                   multtextcountPos++;
-                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
+//                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
                                     }else // generate separators until new value
                                     {
                                           if (dataVectorLenght != -1 & dataVectorLenght > column )
                                           { // not disturbe old data but copie.
                                               combinedData+= dataVector.get(column)+separator;
-                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+//                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
                                           }
                                              else
                                              // put in end last separator.
-                                             if (index + multtextcountPos < column) 
-                                              combinedData+=separator;
+                                              if ((index + multtextcountPos)  != column) 
+                                                  combinedData+=separator;
 //                                        System.out.println("separator:"+combinedData);
                                     }
                              }
@@ -208,7 +220,7 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add(""); // push emty string in while not right spot.
+                              dataStringHolder.add("_"); // push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -217,21 +229,24 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                              
                              for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
                              {
-                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) + ", index: "+index+", multilines:"+multtextcountPos );
+//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
                                          combinedData+=multitext[multtextcountPos]+separator;
                                          multtextcountPos++;;
 
-                                        System.out.println("cath Empty:"+combinedData);
+//                                        System.out.println("cath Empty:"+combinedData);
                                     }else // generate separators until new value
                                     {
-//                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
-//                                              combinedData+= "NOTXT"+separator;
-//                                          else
+                                          
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                              combinedData+= " "+separator;
+                                          else
                                               if (column == 0) // zero point in column
                                                   combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
-//                                      
+                                              else
+                                                   if ((index + multtextcountPos)  != column) 
+                                                       combinedData+=separator;
                                     }
                              }
             }
@@ -242,7 +257,186 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
 
 };
 
+/**
+ * Set data in specific row and in specific column.
+ * Must be use uploadInFile() method to take effect globally.
+ * Can handle multiple sub-data one layer vector in same column.
+ * @param line Where row would be placed 
+ * @param index Where column would be start to be placed
+ * @param multitext Put multiple data using vector.
+ */
+public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
+    
+    String combinedData=""; // buffer data~data2~
+    
+        Vector<String> dataVector = new Vector<>(); 
+        int dataVectorLenght =getLineColumnComponentsLenght(line);
+           dataVector =  getLineVector(line);
+        int multtextcountPos = 0;
+//           System.out.println("multtextcountPos Len : "+multtextcountPos);   
+                        
+        if (dataStringHolder.size() > line) // combine in existing data
+        {
+            
+//            System.err.println("Line is okey");
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                             {
+                                    
+//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+                                    
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
+                                            // Set new Value
+                                    {       // value that must be change ignoring old one.
+                                             
+                                                  combinedData+=multitext.get(multtextcountPos)+separator;
+                                                  multtextcountPos++;
+//                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
+                                    }else // generate separators until new value
+                                    {
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column )
+                                          { // not disturbe old data but copie.
+                                              combinedData+= dataVector.get(column)+separator;
+//                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+                                          }
+                                             else
+                                             // put in end last separator.
+                                              if ((index + multtextcountPos)  != column) 
+                                                  combinedData+=separator;
+//                                        System.out.println("separator:"+combinedData);
+                                    }
+                             }
+                        
+        }else // if no data  exist and can be replased then generate empty rows until reach wanted line and set new data containing constructed string into it.
+            {
+                           //-------Jump through lines-----//
+//                System.out.println("Size: "+dataStringHolder.size()); 
+                    for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
+                        {
+//                              System.out.println("Generate: "+row);
+                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              
+                        }
+                            //-------Write In Collumn------//
+                            
+//                                System.out.println("Set new data ");
+                             
+                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             {
+//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
+                                    {
+                                         combinedData+=multitext.get(multtextcountPos)+separator;
+                                         multtextcountPos++;;
 
+//                                        System.out.println("cath Empty:"+combinedData);
+                                    }else // generate separators until new value
+                                    {
+                                          
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                              combinedData+= " "+separator;
+                                          else
+                                              if (column == 0) // zero point in column
+                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                              else
+                                                   if ((index + multtextcountPos)  != column) 
+                                                       combinedData+=separator;
+                                    }
+                             }
+            }
+       
+             dataStringHolder.set(line, combinedData); // replace constructed string into data storing vector
+//             System.out.println("Rezult "+dataStringHolder.get(line));
+                      
+
+};
+public void setRowCollumnSub (  int line , int index ,arrayList<String>multitext){
+    
+    String combinedData=""; // buffer data~data2~
+    
+        Vector<String> dataVector = new Vector<>(); 
+        int dataVectorLenght =getLineColumnComponentsLenght(line);
+           dataVector =  getLineVector(line);
+        int multtextcountPos = 0;
+//           System.out.println("multtextcountPos Len : "+multtextcountPos);   
+                        
+        if (dataStringHolder.size() > line) // combine in existing data
+        {
+            
+//            System.err.println("Line is okey");
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                             {
+                                    
+//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+                                    
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
+                                            // Set new Value
+                                    {       // value that must be change ignoring old one.
+                                             
+                                                  combinedData+=multitext.get(multtextcountPos)+separator;
+                                                  multtextcountPos++;
+//                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
+                                    }else // generate separators until new value
+                                    {
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column )
+                                          { // not disturbe old data but copie.
+                                              combinedData+= dataVector.get(column)+separator;
+//                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+                                          }
+                                             else
+                                             // put in end last separator.
+                                              if ((index + multtextcountPos)  != column) 
+                                                  combinedData+=separator;
+//                                        System.out.println("separator:"+combinedData);
+                                    }
+                             }
+                        
+        }else // if no data  exist and can be replased then generate empty rows until reach wanted line and set new data containing constructed string into it.
+            {
+                           //-------Jump through lines-----//
+//                System.out.println("Size: "+dataStringHolder.size()); 
+                    for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
+                        {
+//                              System.out.println("Generate: "+row);
+                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              
+                        }
+                            //-------Write In Collumn------//
+                            
+//                                System.out.println("Set new data ");
+                             
+                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             {
+//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
+                                    {
+                                         combinedData+=multitext.get(multtextcountPos)+separator;
+                                         multtextcountPos++;;
+
+//                                        System.out.println("cath Empty:"+combinedData);
+                                    }else // generate separators until new value
+                                    {
+                                          
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                              combinedData+= " "+separator;
+                                          else
+                                              if (column == 0) // zero point in column
+                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                              else
+                                                   if ((index + multtextcountPos)  != column) 
+                                                       combinedData+=separator;
+                                    }
+                             }
+            }
+       
+             dataStringHolder.set(line, combinedData); // replace constructed string into data storing vector
+//             System.out.println("Rezult "+dataStringHolder.get(line));
+                      
+
+};
+/**
+ * Outdated
+ * @param text Text append to next one.
+ */
 private void writeTextAppend (String text) {
      
 //      BufferedWriter bw = null;
@@ -258,12 +452,15 @@ private void writeTextAppend (String text) {
             System.out.println("Error with BufferedWriter:"+filename);
         }
 };
-
+/**
+ * By given path, get if file exist
+ * @return return boolean condition if file exist.
+ */
  private boolean isFileExist() {
-     if (fileSystem.exists())
-         System.out.println("File '"+filename+"' exist.");
-     else
-         System.out.println("Unable to find file '"+filename+"' existence.");
+//     if (fileSystem.exists())
+//         System.out.println("File '"+filename+"' exist.");
+//     else
+//         System.out.println("Unable to find file '"+filename+"' existence.");
      
      return fileSystem.exists();
  }
@@ -284,7 +481,6 @@ private void writeTextAppend (String text) {
                     
                     for(String line; (line = br.readLine()) != null; ) {
 //                         System.out.println(line+"\n");
-                            
                                                  
                          dataStringHolder.add(line); // store new data
                      }
@@ -305,13 +501,13 @@ private void writeTextAppend (String text) {
    {
        String textCollection = "";
        
-       System.out.println("Size: "+getRowsLenght());
+//       System.out.println("Size: "+getRowsLenght());
        
-       for (int line = 0; line < getRowsLenght(); line++) {
+       for (int line = 0; line < getSize(); line++) {
            textCollection+=dataStringHolder.get(line)+"\n";
 //           System.out.println("Line: "+line+" ::::::\n"+textCollection);
        }
-       System.out.println("Data Send:::\n"+textCollection);
+//       System.out.println("Data Send:::\n"+textCollection);
        
        
         try {
@@ -362,7 +558,7 @@ private void writeTextAppend (String text) {
                              
                     }
             }else {
-                 System.err.println("getLineVector line out of range ");
+//                 System.err.println("getLineVector line out of range ");
 //                 throw new ArrayIndexOutOfBoundsException(line);
                  } 
             
@@ -372,11 +568,11 @@ private void writeTextAppend (String text) {
    }
    
    /**
-    * By the given line , detach data from the dataHolder(line) raw string and separate sub-data vector points by given range. 
+    * By the given line , detach data from the dataHolder(line) raw string and separate sub-data into vector points by given range. 
     * @param line Specify column from the data vector.
     * @param start Where start to catch data.
     * @param end   End of catched data.
-    * @return  Provide vector with separated sub-data that was in specified range 'start->end' to do that.
+    * @return  Provide vector with separated sub-data that was defined in specified range 'start->end' to do that.
     */
  public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
    
@@ -510,7 +706,7 @@ public int getLineColumnComponentsLenght(int line) {
  * Get total lines stored in data as length.
  * @return  Provide total amount of the column
  */
-public int getRowsLenght() {
+public int getSize() {
     
      return dataStringHolder.size();
      
@@ -521,9 +717,9 @@ public int getRowsLenght() {
  * Can be use directly point last line.
  * @return Provide last line position.
  */
-public int getLastRowPosition() 
+public int getLenght() 
 {     
-    int len=getRowsLenght();
+    int len=getSize();
     if (len > 0)
       return len - 1;
     else
@@ -536,9 +732,9 @@ public int getLastRowPosition()
  * Can be use directly point last line column length.
  * @return Give value from existing last row columns.
  */
-public int getLastRowColumnPosition() 
+public int getLenghtColumn() 
 {
-return getLineColumnComponentsLenght(getLastRowPosition());
+return getLineColumnComponentsLenght(getLenght());
 }
 
 /**
@@ -552,11 +748,11 @@ public void displayDataMap()
                 System.out.println(line+" "+dataStringHolder.get(line) );
             }
        System.out.println("-------------------------------------------------"); 
-       System.out.println("Total Rows: " +(getRowsLenght())+".");
-       System.out.println("Last row position:" +(getLastRowPosition()) + ". , and last column position:" +getLastRowColumnPosition()+".");
+       System.out.println("Total Rows: " +(getSize())+".");
+       System.out.println("Last row position:" +(getLenght()) + ". , and last column position:" +getLenghtColumn()+".");
        System.out.println("---------------Data map in Value-----------------\n"); 
       
-       for (int line = 0; line < getRowsLenght(); line++) {
+       for (int line = 0; line < getSize(); line++) {
            
            System.out.println("Line: "+line);
            for (int column = 0; column < getLineColumnComponentsLenght(line); column++) 
