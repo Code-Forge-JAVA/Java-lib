@@ -53,7 +53,8 @@ public class StaticFileManager {
        this.dataStringHolder = new Vector<>();
        this.filename = filename;
        fileSystem = new File(filename);
-       separator = "~"; // sentence point separator 
+       separator = "~"; // simbol of pointing separator 
+       readInFileUpdater();// Rist time when program starts , store data in data buffer.
        
        
     }
@@ -63,7 +64,7 @@ public class StaticFileManager {
   * @param text write text into file
   */
  
-public void writeText (String text) {
+private void writeText (String text) {
         try {
              outputStream = new FileWriter(filename);                      
   
@@ -76,100 +77,91 @@ public void writeText (String text) {
         }
 };
 
-
+/**
+ * Set data in specific row and in specific column data.
+ * Must be use uploadInFile()
+ * @param text
+ * @param line
+ * @param index 
+ */
 public void setLineRow (String text,  int line , int index){
     
     String combinedData=""; // buffer data~data2~
     
-    if (dataStringHolder.isEmpty())
-        {
-                readInFileUpdater();
-        }    
-    
         Vector<String> dataVector = new Vector<>(); 
-                   int dataVectorLenght =getLineColumnComponentsLenght(line);
-                      dataVector =  getLineVector(line);
-                      
-    
+        int dataVectorLenght =getLineColumnComponentsLenght(line);
+           dataVector =  getLineVector(line);
+                    
+           //System.out.println("Vector: "+dataVector);   
+                        
         if (dataStringHolder.size() > line) // combine in existing data
         {
             
             System.err.println("Line is okey");
-                    for (int column = 0; column <= (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, index+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
-                                    if (index == column) // Set new Value
-                                    {
-                                        combinedData+=text+separator;
-
-                                        System.out.println("cath:"+combinedData);
+                                    if (index == column) 
+                                            // Set new Value
+                                    {       // value that must be change ignoring old one.
+                                             combinedData+=text+separator;
+//                                            System.out.println("cath:"+combinedData);
                                     }else // generate separators until new value
                                     {
-                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column )
+                                          { // not disturbe old data but copie.
                                               combinedData+= dataVector.get(column)+separator;
-                                          else
+//                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+                                          }
+                                             else
+                                             // put in end last separator.
                                               combinedData+=separator;
-                                        System.out.println("separator:"+combinedData);
+//                                        System.out.println("separator:"+combinedData);
                                     }
                              }
                         
-        }else // if no data that exist and can be replased then generate empty lines until reach wanted line and set new data containing constructed string into it.
+        }else // if no data  exist and can be replased then generate empty rows until reach wanted line and set new data containing constructed string into it.
             {
-                   
-                System.err.println("Size: "+dataStringHolder.size()); 
-                    for (int column = dataStringHolder.size()  ; column  <= line; column++) // generate emty string in this block
+                           //-------Jump through lines-----//
+//                System.out.println("Size: "+dataStringHolder.size()); 
+                    for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
-                              System.out.println("Generate: "+column);
+//                              System.out.println("Generate: "+row);
                               dataStringHolder.add(""); // push emty string in while not right spot.
                               
                         }
-                            //-------------//
+                            //-------Write In Collumn------//
                             
-                                System.out.println("Set new data ");
+//                                System.out.println("Set new data ");
                              
-                             for (int column = 0; column <= (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                             for (int column = 0; column <= ( index); column++) // in column firstly generate separators then put new data
                              {
                                     if (index == column) // Set new Value
                                     {
                                         combinedData+=text+separator;
 
-                                        System.out.println("cath:"+combinedData);
+                                        System.out.println("cath Empty:"+combinedData);
                                     }else // generate separators until new value
                                     {
                                           if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
                                               combinedData+= text+separator;
                                           else
-                                              combinedData+=separator;
-                                        System.out.println("separator:"+combinedData);
+                                              if (column == 0) // zero point in column
+                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                              else
+                                                  combinedData+=separator; // everything after zero point
+//                                        System.out.println("separator Empty:"+combinedData);
                                     }
                              }
             }
        
              dataStringHolder.set(line, combinedData); // replace constructed string into data storing vector
-             System.out.println("Rezult "+dataStringHolder.get(line));
+//             System.out.println("Rezult "+dataStringHolder.get(line));
                       
-//
-////                     dataStringHolder.remove(0);
-//                     dataStringHolder.set(0, "AHAHAHAHAHHAH");
-//                     
-//                     dataStringHolder.add("GOLVE JOKER");
-//                     System.out.println("Remove initiated:----------------");
-//                    for (int i = 0; i < dataStringHolder.size(); i++) 
-//                        {
-//                                System.out.println("Line: "+i+ " "+dataStringHolder.get(i));
-//                        }  
-                     
-//    dataStringHolder.add("param1");
-//    dataStringHolder.add("param2");
-//    dataStringHolder.add("param3");
-//     System.out.println("setLineRow: "+dataStringHolder);
-//     dataStringHolder.add(0, "ButterFly");
-//     System.out.println("setLineRow: "+dataStringHolder);
-//     
-//     System.err.println("custom : "+dataStringHolder.get(line));
+
 };
 
 
-public void writeTextAppend (String text) {
+private void writeTextAppend (String text) {
      
 //      BufferedWriter bw = null;
      
@@ -185,7 +177,7 @@ public void writeTextAppend (String text) {
         }
 };
 
- public boolean isFileExist() {
+ private boolean isFileExist() {
      if (fileSystem.exists())
          System.out.println("File '"+filename+"' exist.");
      else
@@ -231,16 +223,25 @@ public void writeTextAppend (String text) {
    {
        String textCollection = "";
        
+       System.out.println("Size: "+getRowsLenght());
+       
        for (int line = 0; line < getRowsLenght(); line++) {
-           
-           System.out.println("Line: "+line);
-           for (int column = 0; column < getLineColumnComponentsLenght(line); column++) 
-           {
-                System.out.println("  Collumn: "+column);
-               
-           }
-           
+           textCollection+=dataStringHolder.get(line)+"\n";
+//           System.out.println("Line: "+line+" ::::::\n"+textCollection);
        }
+       System.out.println("Data Send:::\n"+textCollection);
+       
+       
+        try {
+             outputStream = new FileWriter(filename);                      
+  
+
+             outputStream.write(textCollection);
+             outputStream.close();
+             
+        }catch (Exception e) {
+            System.out.println("Error with PrintWriter:"+filename);
+        }
    }
    
    
@@ -270,7 +271,7 @@ public void writeTextAppend (String text) {
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
+                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
                                   
                                        SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
                                  ++textIndex; // last text was counted
@@ -280,7 +281,7 @@ public void writeTextAppend (String text) {
                     }
             }else {
                  System.err.println("getLineVector line out of range ");
-    //              throw new ArrayIndexOutOfBoundsException(line);
+//                 throw new ArrayIndexOutOfBoundsException(line);
                  } 
             
         return SeparatedTextVector;
@@ -438,7 +439,7 @@ public int getRowsLenght() {
  * Can be use directly point last line.
  * @return Provide last line position.
  */
-public int getLastLinePosition() 
+public int getLastRowPosition() 
 {     
     int len=getRowsLenght();
     if (len > 0)
@@ -453,9 +454,9 @@ public int getLastLinePosition()
  * Can be use directly point last line column length.
  * @return Give value from existing last row columns.
  */
-public int getLastLineColumnPosition() 
+public int getLastRowColumnPosition() 
 {
-return getLineColumnComponentsLenght(getLastLinePosition());
+return getLineColumnComponentsLenght(getLastRowPosition());
 }
 
 /**
@@ -470,7 +471,7 @@ public void displayDataMap()
             }
        System.out.println("-------------------------------------------------"); 
        System.out.println("Total Rows: " +(getRowsLenght())+".");
-       System.out.println("Last row position:" +(getLastLinePosition()) + ". , and last column position:" +getLastLineColumnPosition()+".");
+       System.out.println("Last row position:" +(getLastRowPosition()) + ". , and last column position:" +getLastRowColumnPosition()+".");
        System.out.println("---------------Data map in Value-----------------\n"); 
       
        for (int line = 0; line < getRowsLenght(); line++) {
