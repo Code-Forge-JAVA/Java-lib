@@ -78,13 +78,13 @@ private void writeText (String text) {
 };
 
 /**
- * Set data in specific row and in specific column data.
- * Must be use uploadInFile()
- * @param text
- * @param line
- * @param index 
+ * Set data in specific row and in specific column.
+ * Must be use uploadInFile() method to take effect.
+ * @param text Put data.
+ * @param line Where row would be placed 
+ * @param index Where column would be placed
  */
-public void setLineRow (String text,  int line , int index){
+public void setRowCollumn (String text,  int line , int index){
     
     String combinedData=""; // buffer data~data2~
     
@@ -150,6 +150,88 @@ public void setLineRow (String text,  int line , int index){
                                               else
                                                   combinedData+=separator; // everything after zero point
 //                                        System.out.println("separator Empty:"+combinedData);
+                                    }
+                             }
+            }
+       
+             dataStringHolder.set(line, combinedData); // replace constructed string into data storing vector
+//             System.out.println("Rezult "+dataStringHolder.get(line));
+                      
+
+};
+
+public void setRowCollumnSub (  int line , int index ,String ...multitext){
+    
+    String combinedData=""; // buffer data~data2~
+    
+        Vector<String> dataVector = new Vector<>(); 
+        int dataVectorLenght =getLineColumnComponentsLenght(line);
+           dataVector =  getLineVector(line);
+        int multtextcountPos = 0;
+           System.out.println("multtextcountPos Len : "+multtextcountPos);   
+                        
+        if (dataStringHolder.size() > line) // combine in existing data
+        {
+            
+            System.err.println("Line is okey");
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                             {
+                                    
+                                   System.out.println("Data Lines: "+(index + multtextcountPos) + ", index: "+index+", multilines:"+multtextcountPos );
+                                    
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // keep tracking multi text arguments where must be replaced 
+                                            // Set new Value
+                                    {       // value that must be change ignoring old one.
+                                             
+                                                  combinedData+=multitext[multtextcountPos]+separator;
+                                                  multtextcountPos++;
+                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
+                                    }else // generate separators until new value
+                                    {
+                                          if (dataVectorLenght != -1 & dataVectorLenght > column )
+                                          { // not disturbe old data but copie.
+                                              combinedData+= dataVector.get(column)+separator;
+                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+                                          }
+                                             else
+                                             // put in end last separator.
+                                             if (index + multtextcountPos < column) 
+                                              combinedData+=separator;
+//                                        System.out.println("separator:"+combinedData);
+                                    }
+                             }
+                        
+        }else // if no data  exist and can be replased then generate empty rows until reach wanted line and set new data containing constructed string into it.
+            {
+                           //-------Jump through lines-----//
+//                System.out.println("Size: "+dataStringHolder.size()); 
+                    for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
+                        {
+//                              System.out.println("Generate: "+row);
+                              dataStringHolder.add(""); // push emty string in while not right spot.
+                              
+                        }
+                            //-------Write In Collumn------//
+                            
+//                                System.out.println("Set new data ");
+                             
+                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             {
+                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) + ", index: "+index+", multilines:"+multtextcountPos );
+                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // Set new value and keep tracking multi text arguments where must be replaced 
+                                    {
+                                         combinedData+=multitext[multtextcountPos]+separator;
+                                         multtextcountPos++;;
+
+                                        System.out.println("cath Empty:"+combinedData);
+                                    }else // generate separators until new value
+                                    {
+//                                          if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+//                                              combinedData+= "NOTXT"+separator;
+//                                          else
+                                              if (column == 0) // zero point in column
+                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+//                                      
                                     }
                              }
             }
