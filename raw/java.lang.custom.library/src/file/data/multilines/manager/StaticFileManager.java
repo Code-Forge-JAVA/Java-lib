@@ -349,7 +349,15 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
                       
 
 };
-public void setRowCollumnSub (  int line , int index ,arrayList<String>multitext){
+/**
+ * Set data in specific row and in specific column.
+ * Must be use uploadInFile() method to take effect globally.
+ * Can handle multiple sub-data one layer arraylist in same column.
+ * @param line Where row would be placed 
+ * @param index Where column would be start to be placed
+ * @param multitext Put multiple data using arraylist.
+ */
+public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -464,10 +472,67 @@ private void writeTextAppend (String text) {
      
      return fileSystem.exists();
  }
+ /**
+  * Inspect banned symbols in this text
+  * @param text Provide text where could be banned symbols
+  * @return True if any or anywhere symbol is found 
+  */
+ public boolean isSeparator(String text)
+ {
+        return text.indexOf(separator) != -1;
+ }
+ /**
+  * Inspect banned symbols in this multi-text
+  * @param text Provide with a multi-text where could be banned symbols
+  * @return True if any or anywhere symbol is found 
+  */
+ public boolean isSeparator(String ...text)
+ {      
+         for (String subtext: text){
+//             System.out.print(subtext+", ");
+             if (subtext.indexOf(separator) != -1)
+             return true;
+         }    
+             
+         return false;
+ }
  
-    
+ /**
+  * Inspect banned symbols in this vector text
+  * @param text Provide vector with a text where could be banned symbols
+  * @return True if any or anywhere symbol is found 
+  */
+ /**
+  * Inspect banned symbols in this vector text
+  * @param text Provide vector with a text where could be banned symbols
+  * @return True if any or anywhere symbol is found 
+  */
+ public boolean isSeparator(Vector<String> text)
+ {      
+         for (String subtext: text){
+//             System.out.print(subtext+", ");
+             if (subtext.indexOf(separator) != -1)
+             return true;
+         }    
+             
+         return false;
+ }
  
- 
+ /**
+  * Inspect banned symbols in this vector text
+  * @param text Provide vector with a text where could be banned symbols
+  * @return True if any or anywhere symbol is found 
+  */
+ public boolean isSeparator(ArrayList<String> text)
+ {      
+         for (String subtext: text){
+//             System.out.print(subtext+", ");
+             if (subtext.indexOf(separator) != -1)
+             return true;
+         }    
+             
+         return false;
+ }
  /**
   *Main and only updater that job is to get all data from file and store into dataStringHolder vector to use as a buffer in this class
   * @since  1.0
@@ -765,7 +830,7 @@ public void displayDataMap()
       System.out.println("-------------------------------------------------");  
 }
 
-
+  
 
 
 
