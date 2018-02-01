@@ -25,7 +25,7 @@ import java.util.Vector;
  *Local file manipulation as data storage in  simple data.txt file.
  * 
  * @author Zilvinus Peciulis
- * @version 1.0 Build 8704 Jan 31 , 2018
+ * @version 1.6.1 Build 8704 Jan 31 , 2018
  */
 public class StaticFileManager {
     
@@ -87,7 +87,7 @@ public void setLineRow (String text,  int line , int index){
         }    
     
         Vector<String> dataVector = new Vector<>(); 
-                   int dataVectorLenght =getLineRowComponentsLenght(line);
+                   int dataVectorLenght =getLineColumnComponentsLenght(line);
                       dataVector =  getLineVector(line);
                       
     
@@ -95,7 +95,7 @@ public void setLineRow (String text,  int line , int index){
         {
             
             System.err.println("Line is okey");
-                    for (int column = 0; column < (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                    for (int column = 0; column <= (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
                              {
                                     if (index == column) // Set new Value
                                     {
@@ -126,7 +126,7 @@ public void setLineRow (String text,  int line , int index){
                             
                                 System.out.println("Set new data ");
                              
-                             for (int column = 0; column < (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
+                             for (int column = 0; column <= (Integer.max(dataVectorLenght, index)); column++) // Generate separators and inject new data string into vector
                              {
                                     if (index == column) // Set new Value
                                     {
@@ -136,7 +136,7 @@ public void setLineRow (String text,  int line , int index){
                                     }else // generate separators until new value
                                     {
                                           if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
-                                              combinedData+= dataVector.get(column)+separator;
+                                              combinedData+= text+separator;
                                           else
                                               combinedData+=separator;
                                         System.out.println("separator:"+combinedData);
@@ -199,7 +199,7 @@ public void writeTextAppend (String text) {
  
  /**
   *Main and only updater that job is to get all data from file and store into dataStringHolder vector to use as a buffer in this class
-  * @since  //Store and update data in dataStringHolder vector
+  * @since  1.0
   */
    public void readInFileUpdater() {
 
@@ -223,8 +223,25 @@ public void writeTextAppend (String text) {
                      }
              // line is not visible here.
      }
-
-
+   /**
+    * Main and only data pusher into file from local class buffer.
+    * Use to update file.txt with data.
+    */
+   public void uploadInFile()
+   {
+       String textCollection = "";
+       
+       for (int line = 0; line < getRowsLenght(); line++) {
+           
+           System.out.println("Line: "+line);
+           for (int column = 0; column < getLineColumnComponentsLenght(line); column++) 
+           {
+                System.out.println("  Collumn: "+column);
+               
+           }
+           
+       }
+   }
    
    
    // return whole block from the raw line into separated units to use later
@@ -371,15 +388,15 @@ public String  getDataFromLineIndex (int line, int index) {
 /**
  * In specified column , count each sub-data points.
  * @param line Given argument are use to specific line. 
- * @return Contains length each sub-data points. If wail return -1
+ * @return Contains length each sub-data points. If fail return -1
  */
-public int getLineRowComponentsLenght(int line) {
+public int getLineColumnComponentsLenght(int line) {
 
             int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
             int textIndex = 0;  // count each index of text between separators
             
-            
+            // emty vector return 0;
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
             {
                  
@@ -397,7 +414,7 @@ public int getLineRowComponentsLenght(int line) {
                              
                     }
             }else {
-                System.err.println("getLineIndexLenght line out of range");
+//                System.out.println("getLineRowComponentsLenght line out of range");
 //                 throw new ArrayIndexOutOfBoundsException(line);    
             }
 
@@ -410,18 +427,63 @@ public int getLineRowComponentsLenght(int line) {
  * Get total lines stored in data as length.
  * @return  Provide total amount of the column
  */
-public int getLinesLenght() {
+public int getRowsLenght() {
     
      return dataStringHolder.size();
      
 }
 
+/**
+ * Information about last line.
+ * Can be use directly point last line.
+ * @return Provide last line position.
+ */
+public int getLastLinePosition() 
+{     
+    int len=getRowsLenght();
+    if (len > 0)
+      return len - 1;
+    else
+      return 0;
+    
+};
+
+/**
+ * Provide information about lines.
+ * Can be use directly point last line column length.
+ * @return Give value from existing last row columns.
+ */
+public int getLastLineColumnPosition() 
+{
+return getLineColumnComponentsLenght(getLastLinePosition());
+}
+
+/**
+ * Display all data from dataStringHolder
+ */
 
 public void displayDataMap() 
-{
-    for (int line = 0; line < dataStringHolder.size(); line++) {
-        System.out.println(line+" "+dataStringHolder.get(line) );
-    }
+{  
+       System.out.println("\n------------Display data map--------------------");
+            for (int line = 0; line < dataStringHolder.size(); line++) {
+                System.out.println(line+" "+dataStringHolder.get(line) );
+            }
+       System.out.println("-------------------------------------------------"); 
+       System.out.println("Total Rows: " +(getRowsLenght())+".");
+       System.out.println("Last row position:" +(getLastLinePosition()) + ". , and last column position:" +getLastLineColumnPosition()+".");
+       System.out.println("---------------Data map in Value-----------------\n"); 
+      
+       for (int line = 0; line < getRowsLenght(); line++) {
+           
+           System.out.println("Line: "+line);
+           for (int column = 0; column < getLineColumnComponentsLenght(line); column++) 
+           {
+                System.out.println("  Collumn: "+column);
+               
+           }
+           
+       }
+      System.out.println("-------------------------------------------------");  
 }
 
 
