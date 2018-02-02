@@ -22,7 +22,7 @@ import java.util.Vector;
 
 
 /**
- *Local file manipulation as data storage in  simple data.txt file.
+ *Local file manipulation as data storage in data.txt file.
  * 
  * @author Zilvinus Peciulis
  * @version 1.6.1 Build 8704 Jan 31 , 2018
@@ -167,7 +167,7 @@ public void setRowCollumn (  int line , int index,String text){
 /**
  * Set data in specific row and in specific column.
  * Must be use uploadInFile() method to take effect globally.
- * Can handle multiple sub-data in same column.
+ * Can handle multiple strings of sub-data in same column.
  * @param line Where row would be placed 
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data.
@@ -260,7 +260,7 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
 /**
  * Set data in specific row and in specific column.
  * Must be use uploadInFile() method to take effect globally.
- * Can handle multiple sub-data one layer vector in same column.
+ * Can handle multiple strings of sub-data one layer vector in same column.
  * @param line Where row would be placed 
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data using vector.
@@ -352,7 +352,7 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
 /**
  * Set data in specific row and in specific column.
  * Must be use uploadInFile() method to take effect globally.
- * Can handle multiple sub-data one layer arraylist in same column.
+ * Can handle multiple string of sub-data one layer arraylist in same column.
  * @param line Where row would be placed 
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data using arraylist.
@@ -473,6 +473,97 @@ private void writeTextAppend (String text) {
      return fileSystem.exists();
  }
  /**
+  * NOT WORKING WARNING!
+  * @param lineLenght NAN
+  * @param indexLenght NAN
+  */
+ public void setWithSeparators (  int lineLenght , int indexLenght){
+    
+     String combinedData=""; // buffer data~data2~
+     String text = "";
+        Vector<String> dataVector = new Vector<>(); 
+        int dataVectorLenght;
+                    
+           //System.out.println("Vector: "+dataVector);   
+         
+           
+            for (int eachLine=0;eachLine < getLenght();eachLine++){
+                     dataVector =  getLineVector(eachLine);
+                     dataVectorLenght =getLineColumnComponentsLenght(eachLine);
+                     
+                    if (dataStringHolder.size() > lineLenght) // combine in existing data
+                    {
+
+            //            System.err.println("Line is okey");
+                                for (int column = 0; column <  indexLenght+1; column++) // if line is contains some data then try to not disturbe that until reach destination column
+                                         {
+
+            //                                   System.out.println("Data Lines: "+(index ) +", column:"+column+ ", index: "+index );  
+                                                if (indexLenght == column) 
+                                                        // Set new Value
+                                                {       // value that must be change ignoring old one.
+                                                         combinedData+=text+separator;
+            //                                            System.out.println("cath:"+combinedData);
+                                                }else // generate separators until new value
+                                                {
+                                                      if (dataVectorLenght != -1 & dataVectorLenght > column )
+                                                      { // not disturbe old data but copie.
+                                                          combinedData+= dataVector.get(column)+separator;
+            //                                              System.out.println("dataVector.get(column) column: "+column+ " value: "+ dataVector.get(column)+"m from: "+dataVector);
+                                                      }
+                                                         else
+                                                         // put in end last separator.
+                                                          combinedData+=separator;
+            //                                        System.out.println("separator:"+combinedData);
+                                                }
+                                         }
+
+                    }else // if no data  exist and can be replased then generate empty rows until reach wanted line and set new data containing constructed string into it.
+                        {
+                                       //-------Jump through lines-----//
+            //                System.out.println("Size: "+dataStringHolder.size()); 
+                                for (int row = dataStringHolder.size()  ; row  <= lineLenght; row++) // jump through lines
+                                    {
+            //                              System.out.println("Generate: "+row);
+                                          dataStringHolder.add("_"); // push emty string in while not right spot.
+
+                                    }
+                                        //-------Write In Collumn------//
+
+            //                                System.out.println("Set new data ");
+
+                                         for (int column = 0; column <= ( indexLenght); column++) // in column firstly generate separators then put new data
+                                         {
+            //                                  System.out.println("Jump Lines: "+ (index ) +", column:"+column+ ", index: "+index );   
+
+                                                if (indexLenght == column) // Set new Value
+                                                {
+                                                    combinedData+=text+separator;
+
+                                                    System.out.println("cath Empty:"+combinedData);
+                                                }else // generate separators until new value
+                                                {
+                                                      if (dataVectorLenght != -1 & dataVectorLenght > column ) // write not changed string
+                                                          combinedData+= text+separator;
+                                                      else
+                                                          if (column == 0) // zero point in column
+                                                              combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                                          else
+                                                              combinedData+=separator; // everything after zero point
+            //                                        System.out.println("separator Empty:"+combinedData);
+                                                }
+                                         }
+                        }
+
+                }                              
+                      
+             dataStringHolder.set(lineLenght, combinedData); // replace constructed string into data storing vector
+//             System.out.println("Rezult "+dataStringHolder.get(line));
+                      
+
+};
+
+ /**
   * Inspect banned symbols in this text
   * @param text Provide text where could be banned symbols
   * @return True if any or anywhere symbol is found 
@@ -519,8 +610,8 @@ private void writeTextAppend (String text) {
  }
  
  /**
-  * Inspect banned symbols in this vector text
-  * @param text Provide vector with a text where could be banned symbols
+  * Inspect banned symbols in this arraylist text
+  * @param text Provide arraylist with a text where could be banned symbols
   * @return True if any or anywhere symbol is found 
   */
  public boolean isSeparator(ArrayList<String> text)
@@ -637,7 +728,7 @@ private void writeTextAppend (String text) {
     * @param line Specify column from the data vector.
     * @param start Where start to catch data.
     * @param end   End of catched data.
-    * @return  Provide vector with separated sub-data that was defined in specified range 'start->end' to do that.
+    * @return  Provide vector with separated sub-data that was defined in specified range 'start-/end' to do that.
     */
  public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
    
@@ -730,7 +821,7 @@ public String  getDataFromLineIndex (int line, int index) {
 
 
 /**
- * In specified column , count each sub-data points.
+ * In specified row , count each  sub-data column.
  * @param line Given argument are use to specific line. 
  * @return Contains length each sub-data points. If fail return -1
  */
@@ -778,7 +869,7 @@ public int getSize() {
 }
 
 /**
- * Information about last line.
+ * Get total ammout of lines ignoring full size.
  * Can be use directly point last line.
  * @return Provide last line position.
  */
@@ -793,7 +884,7 @@ public int getLenght()
 };
 
 /**
- * Provide information about lines.
+ * Provide information about total amount of columns in last row/line.
  * Can be use directly point last line column length.
  * @return Give value from existing last row columns.
  */
