@@ -29,8 +29,9 @@ import java.util.Vector;
  */
 public class StaticFileManager {
     
-    private String filename;
-    private String separator;
+    private final String filename;
+    private final static String separator ="~";//simbol of pointing separator 
+     private final static String zeroseparator ="_";//zero point separator use if no value is in get(0) position.
     private File fileSystem; // file check
     private FileWriter outputStream; 
     private BufferedWriter bufferWrite;
@@ -52,8 +53,7 @@ public class StaticFileManager {
  public   StaticFileManager (String filename){
        this.dataStringHolder = new Vector<>();
        this.filename = filename;
-       fileSystem = new File(filename);
-       separator = "~"; // simbol of pointing separator 
+       fileSystem = new File(filename); // Create new file by path
        readInFileUpdater();// Rist time when program starts , store data in data buffer.
        
        
@@ -128,7 +128,7 @@ public void setRowCollumn (  int line , int index,String text){
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              dataStringHolder.add(zeroseparator+separator); // _~ push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -220,7 +220,7 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              dataStringHolder.add(zeroseparator+separator); // _~ push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -313,7 +313,7 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              dataStringHolder.add(zeroseparator+separator); // _~ push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -405,7 +405,7 @@ public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext
                     for (int row = dataStringHolder.size()  ; row  <= line; row++) // jump through lines
                         {
 //                              System.out.println("Generate: "+row);
-                              dataStringHolder.add("_"); // push emty string in while not right spot.
+                              dataStringHolder.add(zeroseparator+separator); // _~ push emty string in while not right spot.
                               
                         }
                             //-------Write In Collumn------//
@@ -694,24 +694,30 @@ private void writeTextAppend (String text) {
             
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
             {
-                    
-                 
+                    boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
+                    boolean wasZeroPoint = false; // remember if was encountered with zero point separator at least one time
+                    System.out.println("ignoreZeroPoint: "+ignoreZeroSeparator);
                   
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
-
+                        
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
-                                  
-                                       SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
+                               
+                                    if(ignoreZeroSeparator & !wasZeroPoint){
+                                         SeparatedTextVector.add(""); // remove ignoreZeroSeparator that is "_"~~~~"
+                                         wasZeroPoint = true;
+                                         }     
+                                    else
+                                        SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
+                                    
+//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));        
                                  ++textIndex; // last text was counted
                             }
                             
-                             
                     }
             }else {
 //                 System.err.println("getLineVector line out of range ");
@@ -725,6 +731,8 @@ private void writeTextAppend (String text) {
    
    /**
     * By the given line , detach data from the dataHolder(line) raw string and separate sub-data into vector points by given range. 
+    * Start use as offset where to start to recipient data, and end where to stop.
+    * 
     * @param line Specify column from the data vector.
     * @param start Where start to catch data.
     * @param end   End of catched data.
@@ -739,7 +747,8 @@ private void writeTextAppend (String text) {
             
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
             {
-                    
+                     boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
+                     boolean wasZeroPoint = false; // remember if was encountered with zero point separator at least one time
                     
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
@@ -749,11 +758,25 @@ private void writeTextAppend (String text) {
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
+                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
                                      if (start <= textIndex & textIndex < end ) // cath in data in specified range
                                      {
-                                        SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
+                                             if(ignoreZeroSeparator & !wasZeroPoint &  textIndex == 0) // detect zero point where to delete zeroseparator that equal-> '_'
+                                                 {
+                                                     SeparatedTextVector.add(""); // remove ignoreZeroSeparator that is "_"~~~~"
+                                                     wasZeroPoint = true;
+                                                 }   
+                                             else
+                                                 SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
                                      }
+                                     
+//                                       if(ignoreZeroSeparator & !wasZeroPoint ){
+//                                         SeparatedTextVector.add(""); // remove ignoreZeroSeparator that is "_"~~~~"
+//                                         wasZeroPoint = true;
+//                                         }     
+//                                         else
+//                                        SeparatedTextVector.add ( dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd) ); // only job is to get text from bouth separators
+//                                    
                                    ++textIndex; // last text was counted
                             }
                             
@@ -786,8 +809,9 @@ public String  getDataFromLineIndex (int line, int index) {
             
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
             {
+                     boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
                     
-                    System.err.println("Raw data: "+dataStringHolder.get(line));
+//                    System.out.println("Raw data: "+dataStringHolder.get(line));
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
@@ -796,20 +820,24 @@ public String  getDataFromLineIndex (int line, int index) {
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex)+ ", user-index:"+index+",user-found = "+(textIndex == index ? "yes":"no"));
+//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex)+ ", user-index:"+index+",user-found = "+(textIndex == index ? "yes":"no"));
                                   
-                                  if (textIndex == index){ // only save text when needet
+                                  if (ignoreZeroSeparator & index == 0 ) // zero point fix with zeroSeparator where looking '_'
+                                      return "";
+
+                                  if (textIndex == index & ! ignoreZeroSeparator){ // only save text when needet
                                        SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd); // only job is to get text from bouth separators
                                         System.err.println("rezult data: "+SeparatedText);
                                         return SeparatedText; // break and return if find what user want. 
                                   }
-                                 ++textIndex; // last text was counted
+                                 
+                                  ++textIndex; // last text was counted
                             }
                             
                            
                     }
             } else {
-                System.err.println("getDataFromLineIndex line out of range");   
+//                System.err.println("getDataFromLineIndex line out of range");   
             //     throw new ArrayIndexOutOfBoundsException(line);    
             }
             
