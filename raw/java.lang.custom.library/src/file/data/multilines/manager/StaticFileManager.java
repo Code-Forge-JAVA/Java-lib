@@ -593,11 +593,6 @@ private void writeTextAppend (String text) {
   * @param text Provide vector with a text where could be banned symbols
   * @return True if any or anywhere symbol is found 
   */
- /**
-  * Inspect banned symbols in this vector text
-  * @param text Provide vector with a text where could be banned symbols
-  * @return True if any or anywhere symbol is found 
-  */
  public boolean isSeparator(Vector<String> text)
  {      
          for (String subtext: text){
@@ -611,7 +606,7 @@ private void writeTextAppend (String text) {
  
  /**
   * Inspect banned symbols in this arraylist text
-  * @param text Provide arraylist with a text where could be banned symbols
+  * @param text Provided arraylist with a text where could be banned symbols
   * @return True if any or anywhere symbol is found 
   */
  public boolean isSeparator(ArrayList<String> text)
