@@ -646,7 +646,7 @@ private void writeTextAppend (String text) {
      }
    /**
     * Main and only data pusher into file from local class buffer.
-    * Use to update file.txt with data.
+    * Use to update filename.txt with data.
     */
    public void uploadInFile()
    {
