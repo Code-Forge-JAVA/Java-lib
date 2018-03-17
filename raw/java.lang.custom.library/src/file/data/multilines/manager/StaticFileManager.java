@@ -32,7 +32,7 @@ public class StaticFileManager {
     private final String filename;
     private final static String separator ="~";//simbol of pointing separator 
      private final static String zeroseparator ="_";//zero point separator use if no value is in get(0) position.
-    private File fileSystem; // file check
+    private final File fileSystem; // file check
     private FileWriter outputStream; 
     private BufferedWriter bufferWrite;
     // store new data in string format
@@ -54,11 +54,39 @@ public class StaticFileManager {
        this.dataStringHolder = new Vector<>();
        this.filename = filename;
        fileSystem = new File(filename); // Create new file by path
+       
+       try {
+          if ( fileSystem.createNewFile());
+           System.out.println("Clas StaticFileManager: File '"+filename+"' exist: "+fileSystem.getAbsolutePath());
+       }catch (Exception e){
+           System.out.println("Clas StaticFileManager: Unable to create file at: "+fileSystem.getAbsolutePath());
+       }
+      
+       
+       try(BufferedReader br = new BufferedReader(new FileReader(filename))) 
+                {    
+                    int lines = 0;
+                    dataStringHolder.clear(); // clear that old data
+                    
+                    for(String line; (line = br.readLine()) != null; ) {
+//                         System.out.println(line+"\n");
+                                                 
+                         dataStringHolder.add(line); // store new data
+                     }
+                     
+                     lines++;
+                }        
+             catch (Exception e)
+                     {
+                          System.err.println("Class: StaticFileManager, method: readInFileUpdater() ERROR_ReadLineMethod path:"+fileSystem.getAbsolutePath());
+                     }
+
        readInFileUpdater();// Rist time when program starts , store data in data buffer.
        
        
     }
     
+
  /**
   * 
   * @param text write text into file
@@ -84,6 +112,7 @@ private void writeText (String text) {
  * @param index Where column would be placed
  * @param text Put data.
  */
+/*
 public void setRowCollumn (  int line , int index,String text){
     
     String combinedData=""; // buffer data~data2~
@@ -105,7 +134,10 @@ public void setRowCollumn (  int line , int index,String text){
                                     if (index == column) 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
-                                             combinedData+=text+separator;
+                                               if (text.length() > 0)
+                                                 combinedData+=text+separator;
+                                               else
+                                                 combinedData+="_"+separator;  
 //                                            System.out.println("cath:"+combinedData);
                                     }else // generate separators until new value
                                     {
@@ -163,6 +195,7 @@ public void setRowCollumn (  int line , int index,String text){
                       
 
 };
+*/
 
 /**
  * Set data in specific row and in specific column.
@@ -172,7 +205,7 @@ public void setRowCollumn (  int line , int index,String text){
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data.
  */
-public void setRowCollumnSub (  int line , int index ,String ...multitext){
+public void setRowCollumn (  int line , int index ,String ...multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -194,8 +227,11 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // keep tracking multi text arguments where must be replaced 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
-                                             
-                                                  combinedData+=multitext[multtextcountPos]+separator;
+                                                    if (multitext[multtextcountPos].length() <= 0 & multtextcountPos == 0) // Protect from empty/void string
+                                                        combinedData+=zeroseparator+separator;
+                                                    else  // imput data 
+                                                        combinedData+=multitext[multtextcountPos]+separator;
+                                                        
                                                   multtextcountPos++;
 //                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
                                     }else // generate separators until new value
@@ -232,7 +268,11 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
 //                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
-                                         combinedData+=multitext[multtextcountPos]+separator;
+                                                if (multitext[multtextcountPos].length() <= 0 & multtextcountPos == 0) // Protect from empty/void string
+                                                               combinedData+=zeroseparator+separator;
+                                                 else  // imput data 
+                                                               combinedData+=multitext[multtextcountPos]+separator;
+                                         
                                          multtextcountPos++;;
 
 //                                        System.out.println("cath Empty:"+combinedData);
@@ -243,7 +283,7 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
                                               combinedData+= " "+separator;
                                           else
                                               if (column == 0) // zero point in column
-                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                                  combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
                                                    if ((index + multtextcountPos)  != column) 
                                                        combinedData+=separator;
@@ -265,7 +305,7 @@ public void setRowCollumnSub (  int line , int index ,String ...multitext){
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data using vector.
  */
-public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
+public void setRowCollumn (  int line , int index ,Vector<String>multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -288,7 +328,15 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
                                              
-                                                  combinedData+=multitext.get(multtextcountPos)+separator;
+                                                  
+                                                    
+                                                    if ( multtextcountPos == 0 & multitext.get(multtextcountPos).length() <= 0 ) // Protect from empty/void string
+                                                          combinedData+=zeroseparator+separator;
+                                                    else  // imput data 
+                                                          combinedData+=multitext.get(multtextcountPos)+separator;
+                                                            
+//                                                    
+                                                        
                                                   multtextcountPos++;
 //                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
                                     }else // generate separators until new value
@@ -325,7 +373,14 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
 //                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
-                                         combinedData+=multitext.get(multtextcountPos)+separator;
+                                         
+                                        
+                                         if ( multtextcountPos == 0 & multitext.get(multtextcountPos).length() <= 0 ) // Protect from empty/void string
+                                                          combinedData+=zeroseparator+separator;
+                                          else  // imput data 
+                                                          combinedData+=multitext.get(multtextcountPos)+separator;
+                                          
+                                          
                                          multtextcountPos++;;
 
 //                                        System.out.println("cath Empty:"+combinedData);
@@ -336,7 +391,7 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
                                               combinedData+= " "+separator;
                                           else
                                               if (column == 0) // zero point in column
-                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                                  combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
                                                    if ((index + multtextcountPos)  != column) 
                                                        combinedData+=separator;
@@ -357,7 +412,7 @@ public void setRowCollumnSub (  int line , int index ,Vector<String>multitext){
  * @param index Where column would be start to be placed
  * @param multitext Put multiple data using arraylist.
  */
-public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext){
+public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -380,7 +435,13 @@ public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
                                              
-                                                  combinedData+=multitext.get(multtextcountPos)+separator;
+                                              
+                                                  
+                                               if ( multtextcountPos == 0 & multitext.get(multtextcountPos).length() <= 0 ) // Protect from empty/void string
+                                                          combinedData+=zeroseparator+separator;
+                                                    else  // imput data 
+                                                          combinedData+=multitext.get(multtextcountPos)+separator;
+                                                
                                                   multtextcountPos++;
 //                                            System.out.println("cath:"+combinedData + ", multtextcountPos: "+multtextcountPos);
                                     }else // generate separators until new value
@@ -417,7 +478,14 @@ public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext
 //                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
                                     if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
-                                         combinedData+=multitext.get(multtextcountPos)+separator;
+                                         
+                                        
+                                        if ( multtextcountPos == 0 & multitext.get(multtextcountPos).length() <= 0 ) // Protect from empty/void string
+                                                          combinedData+=zeroseparator+separator;
+                                                    else  // imput data 
+                                                          combinedData+=multitext.get(multtextcountPos)+separator;
+                                          
+                                        
                                          multtextcountPos++;;
 
 //                                        System.out.println("cath Empty:"+combinedData);
@@ -428,7 +496,7 @@ public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext
                                               combinedData+= " "+separator;
                                           else
                                               if (column == 0) // zero point in column
-                                                  combinedData+="_"+separator; // if no spacer in zero spot , that can crash order of column
+                                                  combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
                                                    if ((index + multtextcountPos)  != column) 
                                                        combinedData+=separator;
@@ -445,20 +513,15 @@ public void setRowCollumnSub (  int line , int index ,ArrayList<String>multitext
  * Outdated
  * @param text Text append to next one.
  */
-private void writeTextAppend (String text) {
-     
-//      BufferedWriter bw = null;
-     
-       try {
-//             bufferWrite = new   BufferedWriter(new FileWriter(new File(filename),true));// 
 
-             outputStream = new FileWriter(filename,true);                      
-             outputStream.write(text+"\n");
-             outputStream.close();
-             
-        }catch (Exception e) {
-            System.out.println("Error with BufferedWriter:"+filename);
-        }
+/**
+ * Append new values in last line
+ * @param multitext Used to upload data.
+ */
+public void setRowAppend (String ...multitext) {
+     
+   setRowCollumn ( getLenght()+1 , 0 ,multitext);
+    
 };
 /**
  * By given path, get if file exist
@@ -640,7 +703,7 @@ private void writeTextAppend (String text) {
                 }        
              catch (Exception e)
                      {
-                          System.err.println("readLineIn() ERROR_ReadLineMethod");
+                          System.err.println("Class: StaticFileManager, method: readInFileUpdater() ERROR_ReadLineMethod path:"+fileSystem.getAbsolutePath());
                      }
              // line is not visible here.
      }
@@ -691,7 +754,7 @@ private void writeTextAppend (String text) {
             {
                     boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
                     boolean wasZeroPoint = false; // remember if was encountered with zero point separator at least one time
-                    System.out.println("ignoreZeroPoint: "+ignoreZeroSeparator);
+//                    System.out.println("ignoreZeroPoint: "+ignoreZeroSeparator);
                   
                     while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                     {
@@ -730,7 +793,7 @@ private void writeTextAppend (String text) {
     * 
     * @param line Specify column from the data vector.
     * @param start Where start to catch data.
-    * @param end   End of catched data.
+    * @param end   End of catched data, also doesn't have any limits.
     * @return  Provide vector with separated sub-data that was defined in specified range 'start-/end' to do that.
     */
  public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
@@ -753,7 +816,7 @@ private void writeTextAppend (String text) {
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
+//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
                                      if (start <= textIndex & textIndex < end ) // cath in data in specified range
                                      {
                                              if(ignoreZeroSeparator & !wasZeroPoint &  textIndex == 0) // detect zero point where to delete zeroseparator that equal-> '_'
@@ -817,12 +880,12 @@ public String  getDataFromLineIndex (int line, int index) {
                                 
 //                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex)+ ", user-index:"+index+",user-found = "+(textIndex == index ? "yes":"no"));
                                   
-                                  if (ignoreZeroSeparator & index == 0 ) // zero point fix with zeroSeparator where looking '_'
-                                      return "";
+//                                  if (ignoreZeroSeparator & index == 0 ) // fix zero point  
+//                                      return ""; 
 
-                                  if (textIndex == index & ! ignoreZeroSeparator){ // only save text when needet
+                                  if (textIndex == index & ! (ignoreZeroSeparator & textIndex == 0) ){ // only save text when needet , zero point protection
                                        SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd); // only job is to get text from bouth separators
-                                        System.err.println("rezult data: "+SeparatedText);
+//                                        System.err.println("rezult data: "+SeparatedText);
                                         return SeparatedText; // break and return if find what user want. 
                                   }
                                  
@@ -832,7 +895,7 @@ public String  getDataFromLineIndex (int line, int index) {
                            
                     }
             } else {
-//                System.err.println("getDataFromLineIndex line out of range");   
+//                System.out.println("getDataFromLineIndex line out of range");   
             //     throw new ArrayIndexOutOfBoundsException(line);    
             }
             
