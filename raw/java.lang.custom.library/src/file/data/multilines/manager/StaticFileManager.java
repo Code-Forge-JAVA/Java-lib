@@ -3,6 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
+
+
+/* Exsample How To Use It
+//1)
+StaticFileManager fileManages = new StaticFileManager("databases.txt"); // create or read from file
+                fileManages.setRowCollumn(3, 1, "Hello","World"); //set new value in class buffer also suport vector and arrayList
+                fileManages.uploadInFile(); // upload from class buffer into file
+System.out.println("Rezult: "+ fileManages.getLineVectorSpecifiedSize(3, 0, 5) ); // get data array and display rezult.
+
+note:
+reupload into class buffer use: fileManages.readInFileUpdater();
+
+*/
+
+
+
 package file.data.multilines.manager;
 
 
