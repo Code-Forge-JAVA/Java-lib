@@ -967,7 +967,7 @@ public int getLineColumnComponentsLenght(int line) {
  * @param dataMath Data that math in specified index
  * @return Give data row position if find any data are mathed
  */
- public int getDataPosition( int index, String dataMath)  { 
+ public int getDataRowPosition( int index, String dataMath)  { 
         
 
 //         
@@ -989,7 +989,7 @@ public int getLineColumnComponentsLenght(int line) {
                     
                                     boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
 
-                                    System.out.print("line: "+line+",data Math: ["+dataMath+"], data: ");
+                               //     System.out.print("line: "+line+",data Math: ["+dataMath+"], data: ");
                                     
                //                    System.out.println("Raw data: "+dataStringHolder.get(line));
                                    while (separatorIndexEnd != -1 ) // while not reached end in string with point separators , and size of the line is not greater then expected then
@@ -1001,15 +1001,149 @@ public int getLineColumnComponentsLenght(int line) {
                                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
 
                                                  SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
-                                                 System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath) == 0? "yes" : "no"));
+                                         //        System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath) == 0? "yes" : "no"));
                                                  
-                                                 if (SeparatedText.compareTo(dataMath) == 0 ){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath) == 0 & index == textIndex){ // only save text when needet , zero point protection
                                                     return line;
                                                  }
 
                                                  ++textIndex; // last text was counted
                                            }
 
+
+                                   }
+                          
+                               //      System.out.println("");
+            }
+                           
+
+                       return -1;
+   }
+
+
+/**
+ * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
+ * @param index Where should compare a data.
+ * @param dataMath Data that math in specified index
+ * @param ignoreCasSensitive Ignore comparison of smaller or upper case.
+ * @return Give data row position if find any data are mathed
+ */
+ public int getDataRowPosition( int index, String dataMath , boolean ignoreCaseSensitive)  { 
+        
+
+//         
+         
+         
+           
+         
+           
+                
+                for (int line = 0; line < getLenght()+1; line++) 
+                {
+                    
+//                       System.err.println("DATA: "+dataStringHolder.get(line));
+                    int separatorIndexStart =0;// rezoved begining of the text position    
+                    int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+                    int textIndex = 0;  // count each index of text between separators
+                    String SeparatedText="";
+                    
+                    
+                                    boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
+
+                               //     System.out.print("line: "+line+",data Math: ["+dataMath+"], data: ");
+                                    
+               //                    System.out.println("Raw data: "+dataStringHolder.get(line));
+                                   while (separatorIndexEnd != -1 ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                                   {
+                                       separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                                       separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+                                       
+
+                                           if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+
+                                                 SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
+                                               
+                                                 if (ignoreCaseSensitive){ // ignore case sencitive
+                                                    SeparatedText = SeparatedText.toUpperCase();
+                                                    dataMath = dataMath.toUpperCase();
+                                                }
+                                         //        System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath) == 0? "yes" : "no"));
+                                                 
+                                                 if (SeparatedText.compareTo(dataMath) == 0 & index == textIndex){ // only save text when needet , zero point protection
+                                                    return line;
+                                                 }
+
+                                                 ++textIndex; // last text was counted
+                                           }
+
+
+                                   }
+                          
+                               //      System.out.println("");
+            }
+                           
+
+                       return -1;
+   }
+ 
+
+/**
+ * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
+ * @param index Where should compare a data.
+ * @param dataMath Data that math in specified index
+ * @return Give data row position if find any data are mathed
+ */
+ 
+ public int getDataRowPosition( int startIndex, int endIndex, String ...dataMath )  { 
+        
+
+//         
+         
+         
+           
+         
+           
+                
+                for (int line = 0; line < getLenght()+1; line++) 
+                {
+                    
+//                       System.err.println("DATA: "+dataStringHolder.get(line));
+                    int separatorIndexStart =0;// rezoved begining of the text position    
+                    int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+                    int textIndex = 0;  // count each index of text between separators
+                    int countData = 0;
+                    String SeparatedText="";
+                    
+                    
+                                    boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
+
+                                   // System.out.print("line: "+line+",data Math: ["+dataMath[countData]+"], data: ");
+                                    
+               //                    System.out.println("Raw data: "+dataStringHolder.get(line));
+                                   while (separatorIndexEnd != -1 ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                                   {
+                                       separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                                       separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+                                       
+
+                                           if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+
+                                                 SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
+                                                 System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath[countData]) == 0? "yes" : "no"));
+                                                 
+                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex >= textIndex) ){ // only save text when needet , zero point protection
+                                                    
+                                                     if(dataMath.length > countData & dataMath.length != 1 )
+                                                        countData++;
+                                                     
+                                                   //  System.out.print(",math len:"+dataMath.length+",--->Data Count:"+countData);
+                                                 }
+
+                                                 ++textIndex; // last text was counted
+                                           }
+                                           
+                                           if (countData >= (endIndex-startIndex ) )
+                                               return line;
 
                                    }
                           
@@ -1021,7 +1155,7 @@ public int getLineColumnComponentsLenght(int line) {
    }
 
 
-
+ 
  // get lenght only from RAM but not directly from file.txt , to do that need use updeter first.
 /**
  * Get total lines stored in data as length.
