@@ -1222,36 +1222,27 @@ public int getLineColumnComponentsLenght(int line) {
                                                   }
                                                   System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath[countData]) == 0? "yes" : "no"));
                                                  
-                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex >= textIndex) ){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex > textIndex) ){ // only save text when needet , zero point protection
                                                        
                                                     // Dont go then max arguments.                 if arguments less then indexes range . Ignore. Especily when is fron 0 to 2 
                                                      if(dataMath.length    >  countData & (endIndex-startIndex ) <= dataMath.length   ){
                                                       
-                                                         
-                                                    // System.out.print(",Math len:"+dataMath.length+",--->Data Count:"+countData);
-                                                         
-                                                    
-                                                           
-                                                            
-                                                            if (countData != textIndex){ //  dataMath if is not in correct order then return  false as rezult is -1
-                                                                System.out.print("\n Chain expected value: "+countData + " but is "+textIndex);
-                                                                return -1;
-                                                            } 
-                                                            
                                                              countData++;
-                                                            
-                                                    //  System.out.print("- FINAL-->Data Count:"+countData);
                                                      }
-                                                 } 
-
+                                                 }
+//                                                  
+                                                 
                                                  ++textIndex; // last text was counted
+                                           
                                            }
                                            
-                                           System.out.println(",[-N-->Data Count:"+countData +" equal?>"+(endIndex-startIndex )+"]");
+                                           System.out.println(",[-N-->Data Count:"+countData +" Expected:> "+(endIndex-startIndex )+"]");
                                            
-                                           if (countData  == (endIndex-startIndex )   )
+                                           if (countData  == (endIndex-startIndex )   ) // return rezult find all values and registered as a cout
                                                return line;
-
+                                           
+                                           if (textIndex > endIndex ) // stop looking after known max range 
+                                              break;  
                                    }
                           
                                      System.out.print("");
