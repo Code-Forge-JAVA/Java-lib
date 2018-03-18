@@ -965,7 +965,7 @@ public int getLineColumnComponentsLenght(int line) {
  * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
  * @param index Where should compare a data.
  * @param dataMath Data that math in specified index
- * @return Give data row position if find any data are mathed
+ * @return Give data row position if find any data are mathed. Else return -1
  */
  public int getDataRowPosition( int index, String dataMath)  { 
         
@@ -1026,7 +1026,7 @@ public int getLineColumnComponentsLenght(int line) {
  * @param index Where should compare a data.
  * @param dataMath Data that math in specified index
  * @param ignoreCasSensitive Ignore comparison of smaller or upper case.
- * @return Give data row position if find any data are mathed
+ * @return Give data row position if find any data are mathed. Else return -1
  */
  public int getDataRowPosition( int index, String dataMath , boolean ignoreCaseSensitive)  { 
         
@@ -1088,21 +1088,21 @@ public int getLineColumnComponentsLenght(int line) {
  
 
 /**
- * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
- * @param index Where should compare a data.
- * @param dataMath Data that math in specified index
- * @return Give data row position if find any data are mathed
+ * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.
+ * Note: All Data Math should be in correct order to succeed a chain test.
+ * @param startIndex Starting point where data should exist.
+ * @param endIndex ending point where data should end.
+ * @param dataMath Data that math in specified range between starting point and ending point
+ * @return Give data row when find full data collection. Else return -1.
  */
  
  public int getDataRowPosition( int startIndex, int endIndex, String ...dataMath )  { 
         
-
-//         
-         
-         
-           
-         
-           
+     if  (startIndex >= endIndex) // Out of range 
+  {
+      System.err.println("getDataRowPosition int startIndex is to big.");
+      return -1;
+  }              
                 
                 for (int line = 0; line < getLenght()+1; line++) 
                 {
@@ -1119,7 +1119,7 @@ public int getLineColumnComponentsLenght(int line) {
 
                                    // System.out.print("line: "+line+",data Math: ["+dataMath[countData]+"], data: ");
                                     
-               //                    System.out.println("Raw data: "+dataStringHolder.get(line));
+                                   System.out.println("Raw data: "+dataStringHolder.get(line));
                                    while (separatorIndexEnd != -1 ) // while not reached end in string with point separators , and size of the line is not greater then expected then
                                    {
                                        separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
@@ -1129,25 +1129,132 @@ public int getLineColumnComponentsLenght(int line) {
                                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
 
                                                  SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
-                                                 System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath[countData]) == 0? "yes" : "no"));
+                                               
+                                                  System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath[countData]) == 0? "yes" : "no"));
                                                  
                                                  if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex >= textIndex) ){ // only save text when needet , zero point protection
+                                                       
+                                                    // Dont go then max arguments.                 if arguments less then indexes range . Ignore. Especily when is fron 0 to 2 
+                                                     if(dataMath.length    >  countData & (endIndex-startIndex ) <= dataMath.length   ){
+                                                      
+                                                         
+                                                    // System.out.print(",Math len:"+dataMath.length+",--->Data Count:"+countData);
+                                                         
                                                     
-                                                     if(dataMath.length > countData & dataMath.length != 1 )
-                                                        countData++;
-                                                     
-                                                   //  System.out.print(",math len:"+dataMath.length+",--->Data Count:"+countData);
-                                                 }
+                                                           
+                                                            
+                                                            if (countData != textIndex){ //  dataMath if is not in correct order then return  false as rezult is -1
+                                                                System.out.print("\n Chain expected value: "+countData + " but is "+textIndex);
+                                                                return -1;
+                                                            } 
+                                                            
+                                                             countData++;
+                                                            
+                                                    //  System.out.print("- FINAL-->Data Count:"+countData);
+                                                     }
+                                                 } 
 
                                                  ++textIndex; // last text was counted
                                            }
                                            
-                                           if (countData >= (endIndex-startIndex ) )
+                                           System.out.println(",[-N-->Data Count:"+countData +" equal?>"+(endIndex-startIndex )+"]");
+                                           
+                                           if (countData  == (endIndex-startIndex )   )
                                                return line;
 
                                    }
                           
-                                     System.out.println("");
+                                     System.out.print("");
+            }
+                           
+
+                       return -1;
+   }
+
+ 
+/**
+ * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.
+ * Note: All Data Math should be in correct order to succeed a chain test.
+ * @param startIndex Starting point where data should exist.
+ * @param endIndex ending point where data should end.
+ * @param dataMath Data that math in specified range between starting point and ending point
+ * @param ignoreCasSensitive Ignore comparison of smaller or upper case.
+ * @return Give data row when find full data collection. Else return -1.
+ */
+
+ public int getDataRowPosition( int startIndex, int endIndex,boolean ignoreCaseSensitive , String ...dataMath  )  { 
+        
+     if  (startIndex >= endIndex) // Out of range 
+  {
+      System.err.println("getDataRowPosition int startIndex is to big.");
+      return -1;
+  }              
+                
+                for (int line = 0; line < getLenght()+1; line++) 
+                {
+                    
+//                       System.err.println("DATA: "+dataStringHolder.get(line));
+                    int separatorIndexStart =0;// rezoved begining of the text position    
+                    int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
+                    int textIndex = 0;  // count each index of text between separators
+                    int countData = 0;
+                    String SeparatedText="";
+                    
+                    
+                                    boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
+
+                                   // System.out.print("line: "+line+",data Math: ["+dataMath[countData]+"], data: ");
+                                    
+                                   System.out.println("Raw data: "+dataStringHolder.get(line));
+                                   while (separatorIndexEnd != -1 ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                                   {
+                                       separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
+                                       separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
+                                       
+
+                                           if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+
+                                                 SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
+                                               
+                                                  if (ignoreCaseSensitive){ // ignore case sencitive
+                                                    SeparatedText = SeparatedText.toUpperCase();
+                                                    dataMath[countData] = dataMath[countData].toUpperCase();
+                                                  }
+                                                  System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath[countData]) == 0? "yes" : "no"));
+                                                 
+                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex >= textIndex) ){ // only save text when needet , zero point protection
+                                                       
+                                                    // Dont go then max arguments.                 if arguments less then indexes range . Ignore. Especily when is fron 0 to 2 
+                                                     if(dataMath.length    >  countData & (endIndex-startIndex ) <= dataMath.length   ){
+                                                      
+                                                         
+                                                    // System.out.print(",Math len:"+dataMath.length+",--->Data Count:"+countData);
+                                                         
+                                                    
+                                                           
+                                                            
+                                                            if (countData != textIndex){ //  dataMath if is not in correct order then return  false as rezult is -1
+                                                                System.out.print("\n Chain expected value: "+countData + " but is "+textIndex);
+                                                                return -1;
+                                                            } 
+                                                            
+                                                             countData++;
+                                                            
+                                                    //  System.out.print("- FINAL-->Data Count:"+countData);
+                                                     }
+                                                 } 
+
+                                                 ++textIndex; // last text was counted
+                                           }
+                                           
+                                           System.out.println(",[-N-->Data Count:"+countData +" equal?>"+(endIndex-startIndex )+"]");
+                                           
+                                           if (countData  == (endIndex-startIndex )   )
+                                               return line;
+
+                                   }
+                          
+                                     System.out.print("");
             }
                            
 
