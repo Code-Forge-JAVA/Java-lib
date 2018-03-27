@@ -226,10 +226,10 @@ public void setRowCollumn (  int line , int index,String text){
  * Must be use uploadInFile() method to take effect globally.
  * Can handle multiple strings of sub-data in same column.
  * @param line Where row would be placed 
- * @param index Where column would be start to be placed
+ * @param indexStart Where column would be start to be placed
  * @param multitext Put multiple data.
  */
-public void setRowCollumn (  int line , int index ,String ...multitext){
+public void setRowCollumn (  int line , int indexStart ,String ...multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -243,14 +243,14 @@ public void setRowCollumn (  int line , int index ,String ...multitext){
         {
             
 //            System.err.println("Line is okey");
-                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (indexStart + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
                                     
-//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+//                                   System.out.println("Data Lines: "+(indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
                                   
                                     
             
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // keep tracking multi text arguments where must be replaced 
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.length) ) // keep tracking multi text arguments where must be replaced 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
                                                     if (column ==0 && multitext[multtextcountPos].length() <= 0  ) // Protect from empty/void string
@@ -280,7 +280,7 @@ public void setRowCollumn (  int line , int index ,String ...multitext){
                                           }
                                              else
                                              // put in end last separator.
-                                              if ((index + multtextcountPos)  != column) {
+                                              if ((indexStart + multtextcountPos)  != column) {
                                                   combinedData+=separator;
 //                                                  System.err.println(" Seperated "+column);
                                               }
@@ -305,12 +305,12 @@ public void setRowCollumn (  int line , int index ,String ...multitext){
                             
 //                                System.out.println("Set new data ");
                              
-                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             for (int column = 0; column <= (indexStart + multtextcountPos) ; column++) // in column firstly generate separators then put new data
                              {
-//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.length) ) // Set new value and keep tracking multi text arguments where must be replaced 
+//                                   System.out.println("Jump Lines: "+ (indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.length) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
-                                                if (multitext[multtextcountPos].length() <= 0 && index ==0 && multtextcountPos == 0) // Protect from empty/void string
+                                                if (multitext[multtextcountPos].length() <= 0 && indexStart ==0 && multtextcountPos == 0) // Protect from empty/void string
                                                                combinedData+=zeroseparator+separator;
                                                  else  // imput data 
                                                                combinedData+=multitext[multtextcountPos]+separator;
@@ -327,7 +327,7 @@ public void setRowCollumn (  int line , int index ,String ...multitext){
                                               if (column == 0) // zero point in column
                                                   combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
-                                                   if ((index + multtextcountPos)  != column) 
+                                                   if ((indexStart + multtextcountPos)  != column) 
                                                        combinedData+=separator;
                                     }
                              }
@@ -344,10 +344,10 @@ public void setRowCollumn (  int line , int index ,String ...multitext){
  * Must be use uploadInFile() method to take effect globally.
  * Can handle multiple strings of sub-data one layer vector in same column.
  * @param line Where row would be placed 
- * @param index Where column would be start to be placed
+ * @param indexStart Where column would be start to be placed
  * @param multitext Put multiple data using vector.
  */
-public void setRowCollumn (  int line , int index ,Vector<String>multitext){
+public void setRowCollumn (  int line , int indexStart ,Vector<String>multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -361,12 +361,12 @@ public void setRowCollumn (  int line , int index ,Vector<String>multitext){
         {
             
 //            System.err.println("Line is okey");
-                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (indexStart + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
                                     
-//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+//                                   System.out.println("Data Lines: "+(indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
                                     
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
                                              
@@ -402,7 +402,7 @@ public void setRowCollumn (  int line , int index ,Vector<String>multitext){
                                           }
                                              else
                                              // put in end last separator.
-                                              if ((index + multtextcountPos)  != column) 
+                                              if ((indexStart + multtextcountPos)  != column) 
                                                   combinedData+=separator;
 //                                        System.out.println("separator:"+combinedData);
                                     }
@@ -422,10 +422,10 @@ public void setRowCollumn (  int line , int index ,Vector<String>multitext){
                             
 //                                System.out.println("Set new data ");
                              
-                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             for (int column = 0; column <= (indexStart + multtextcountPos) ; column++) // in column firstly generate separators then put new data
                              {
-//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
+//                                   System.out.println("Jump Lines: "+ (indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
                                          
                                         
@@ -447,7 +447,7 @@ public void setRowCollumn (  int line , int index ,Vector<String>multitext){
                                               if (column == 0) // zero point in column
                                                   combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
-                                                   if ((index + multtextcountPos)  != column) 
+                                                   if ((indexStart + multtextcountPos)  != column) 
                                                        combinedData+=separator;
                                     }
                              }
@@ -463,10 +463,10 @@ public void setRowCollumn (  int line , int index ,Vector<String>multitext){
  * Must be use uploadInFile() method to take effect globally.
  * Can handle multiple string of sub-data one layer arraylist in same column.
  * @param line Where row would be placed 
- * @param index Where column would be start to be placed
+ * @param indexStart Where column would be start to be placed
  * @param multitext Put multiple data using arraylist.
  */
-public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
+public void setRowCollumn (  int line , int indexStart ,ArrayList<String>multitext){
     
     String combinedData=""; // buffer data~data2~
     
@@ -480,12 +480,12 @@ public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
         {
             
 //            System.err.println("Line is okey");
-                    for (int column = 0; column < (Integer.max(dataVectorLenght, (index + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
+                    for (int column = 0; column < (Integer.max(dataVectorLenght, (indexStart + multtextcountPos)+1)); column++) // if line is contains some data then try to not disturbe that until reach destination column
                              {
                                     
-//                                   System.out.println("Data Lines: "+(index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
+//                                   System.out.println("Data Lines: "+(indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
                                     
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.size()) ) // keep tracking multi text arguments where must be replaced 
                                             // Set new Value
                                     {       // value that must be change ignoring old one.
                                              
@@ -517,7 +517,7 @@ public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
                                           }
                                              else
                                              // put in end last separator.
-                                              if ((index + multtextcountPos)  != column) 
+                                              if ((indexStart + multtextcountPos)  != column) 
                                                   combinedData+=separator;
 //                                        System.out.println("separator:"+combinedData);
                                     }
@@ -537,10 +537,10 @@ public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
                             
 //                                System.out.println("Set new data ");
                              
-                             for (int column = 0; column <= (index + multtextcountPos) ; column++) // in column firstly generate separators then put new data
+                             for (int column = 0; column <= (indexStart + multtextcountPos) ; column++) // in column firstly generate separators then put new data
                              {
-//                                   System.out.println("Jump Lines: "+ (index + multtextcountPos) +", column:"+column+ ", index: "+index+", multilines:"+multtextcountPos );
-                                    if ( (index + multtextcountPos)  ==  column & (index + multtextcountPos) < (index + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
+//                                   System.out.println("Jump Lines: "+ (indexStart + multtextcountPos) +", column:"+column+ ", indexStart: "+indexStart+", multilines:"+multtextcountPos );
+                                    if ( (indexStart + multtextcountPos)  ==  column & (indexStart + multtextcountPos) < (indexStart + multitext.size()) ) // Set new value and keep tracking multi text arguments where must be replaced 
                                     {
                                          
                                         
@@ -562,7 +562,7 @@ public void setRowCollumn (  int line , int index ,ArrayList<String>multitext){
                                               if (column == 0) // zero point in column
                                                   combinedData+=zeroseparator+separator; // if no spacer in zero spot , that can crash order of column
                                               else
-                                                   if ((index + multtextcountPos)  != column) 
+                                                   if ((indexStart + multtextcountPos)  != column) 
                                                        combinedData+=separator;
                                     }
                              }
@@ -953,14 +953,14 @@ public boolean setRowRemove (int uniqueIndexCompareStart,int uniqueIndexCompareE
    
    /**
     * By the given line , detach data from the dataHolder(line) raw string and separate sub-data into vector points by given range. 
-    * Start use as offset where to start to recipient data, and end where to stop.
+    * Start use as offset where to indexStart to recipient data, and indexEnd where to stop.
     * 
     * @param line Specify column from the data vector.
-    * @param start Where start to catch data.
-    * @param end   End of catched data, also doesn't have any limits.
-    * @return  Provide vector with separated sub-data that was defined in specified range 'start-/end' to do that.
+    * @param indexStart Where indexStart to catch data.
+    * @param indexEnd   End of catched data, also doesn't have any limits.
+    * @return  Provide vector with separated sub-data that was defined in specified range 'indexStart-/indexEnd' to do that.
     */
- public Vector getLineVectorSpecifiedSize(int line, int start , int end) {
+ public Vector getLineVectorSpecifiedSize(int line, int indexStart , int indexEnd) {
    
       int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
@@ -972,7 +972,7 @@ public boolean setRowRemove (int uniqueIndexCompareStart,int uniqueIndexCompareE
                      boolean ignoreZeroSeparator = (dataStringHolder.get(line).indexOf(zeroseparator) == 0 ? true:false);
                      boolean wasZeroPoint = false; // remember if was encountered with zero point separator at least one time
                     
-                    while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached end in string with point separators , and size of the line is not greater then expected then
+                    while (separatorIndexEnd != -1 & dataStringHolder.size() > line ) // while not reached indexEnd in string with point separators , and size of the line is not greater then expected then
                     {
                         separatorIndexStart = separatorIndexEnd; // update last each time leaving beginning of current text between separators
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
@@ -980,8 +980,8 @@ public boolean setRowRemove (int uniqueIndexCompareStart,int uniqueIndexCompareE
                         
                             if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
                                 
-//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
-                                     if (start <= textIndex & textIndex < end ) // cath in data in specified range
+//                               System.out.println("line:"+line+",Separator indexStart-index:" +separatorIndexStart+", indexEnd-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring((separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd)+"], text-index counted: "+(textIndex));
+                                     if (indexStart <= textIndex & textIndex < indexEnd ) // cath in data in specified range
                                      {
                                              if(ignoreZeroSeparator & !wasZeroPoint &  textIndex == 0) // detect zero point where to delete zeroseparator that equal-> '_'
                                                  {
@@ -1017,16 +1017,16 @@ public boolean setRowRemove (int uniqueIndexCompareStart,int uniqueIndexCompareE
 /**
  * By the given line , detach data from the dataHolder(line) raw string and separate into single string of sub-data. 
  * @param line Specify column from the data vector.
- * @param index Specify position in column row.
+ * @param indexStart Specify position in column row.
  * @return Separated single string of sub-data.
  */   
-public String  getDataFromLineIndex (int line, int index) { 
+public String  getDataFromLineIndex (int line, int indexStart) { 
 //         
          
          
             int separatorIndexStart =0;// rezoved begining of the text position    
             int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-            int textIndex = 0;  // count each index of text between separators
+            int textIndex = 0;  // count each indexStart of text between separators
             String SeparatedText="";
             
             if (dataStringHolder.size() > line ) // 0 is equal that no text in file 
@@ -1040,14 +1040,14 @@ public String  getDataFromLineIndex (int line, int index) {
                         separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
 
                         
-                            if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                            if (separatorIndexEnd != -1) { //in any case if indexStart range is to big when that will rezult in no string value
                                 
-//                               System.out.println("line:"+line+",Separator start-index:" +separatorIndexStart+", end-index : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-index counted: "+(textIndex)+ ", user-index:"+index+",user-found = "+(textIndex == index ? "yes":"no"));
+//                               System.out.println("line:"+line+",Separator start-indexStart:" +separatorIndexStart+", end-indexStart : " + separatorIndexEnd+" ,output:["+dataStringHolder.get(line).substring(separatorIndexStart+1,separatorIndexEnd)+"], text-indexStart counted: "+(textIndex)+ ", user-indexStart:"+indexStart+",user-found = "+(textIndex == indexStart ? "yes":"no"));
                                   
-//                                  if (ignoreZeroSeparator & index == 0 ) // fix zero point  
+//                                  if (ignoreZeroSeparator & indexStart == 0 ) // fix zero point  
 //                                      return ""; 
 
-                                  if (textIndex == index & ! (ignoreZeroSeparator & textIndex == 0) ){ // only save text when needet , zero point protection
+                                  if (textIndex == indexStart & ! (ignoreZeroSeparator & textIndex == 0) ){ // only save text when needet , zero point protection
                                        SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd); // only job is to get text from bouth separators
 //                                        System.err.println("rezult data: "+SeparatedText);
                                         return SeparatedText; // break and return if find what user want. 
@@ -1108,12 +1108,12 @@ public int getLineColumnComponentsLenght(int line) {
 
 
 /**
- * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
- * @param index Where should compare a data.
- * @param dataMath Data that math in specified index
+ * Obtain data existence from unknown line by defined indexStart position where are compare whith  dataMath given value.  
+ * @param indexStart Where should compare a data.
+ * @param dataMath Data that math in specified indexStart
  * @return Give data row position if find any data are mathed. Else return -1
  */
- public int getDataRowPosition( int index, String dataMath)  { 
+ public int getDataRowPosition( int indexStart, String dataMath)  { 
         
 
 //         
@@ -1129,7 +1129,7 @@ public int getLineColumnComponentsLenght(int line) {
 //                       System.err.println("DATA: "+dataStringHolder.get(line));
                     int separatorIndexStart =0;// rezoved begining of the text position    
                     int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-                    int textIndex = 0;  // count each index of text between separators
+                    int textIndex = 0;  // count each indexStart of text between separators
                     String SeparatedText="";
                     
                     
@@ -1144,12 +1144,12 @@ public int getLineColumnComponentsLenght(int line) {
                                        separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
                                        
 
-                                           if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                           if (separatorIndexEnd != -1) { //in any case if indexStart range is to big when that will rezult in no string value
 
                                                  SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
                                          //        System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath) == 0? "yes" : "no"));
                                                  
-                                                 if (SeparatedText.compareTo(dataMath) == 0 & index == textIndex){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath) == 0 & indexStart == textIndex){ // only save text when needet , zero point protection
                                                     return line;
                                                  }
 
@@ -1168,13 +1168,13 @@ public int getLineColumnComponentsLenght(int line) {
 
 
 /**
- * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.  
- * @param index Where should compare a data.
- * @param dataMath Data that math in specified index
+ * Obtain data existence from unknown line by defined indexStart position where are compare whith  dataMath given value.  
+ * @param indexStart Where should compare a data.
+ * @param dataMath Data that math in specified indexStart
  * @param ignoreCaseSensitive Ignore comparison of smaller or upper case.
  * @return Give data row position if find any data are mathed. Else return -1
  */
- public int getDataRowPosition( int index, String dataMath , boolean ignoreCaseSensitive)  { 
+ public int getDataRowPosition( int indexStart, String dataMath , boolean ignoreCaseSensitive)  { 
         
 
 //         
@@ -1190,7 +1190,7 @@ public int getLineColumnComponentsLenght(int line) {
 //                       System.err.println("DATA: "+dataStringHolder.get(line));
                     int separatorIndexStart =0;// rezoved begining of the text position    
                     int separatorIndexEnd =0; // rezolve last marker point of  ' ~ ' separator
-                    int textIndex = 0;  // count each index of text between separators
+                    int textIndex = 0;  // count each indexStart of text between separators
                     String SeparatedText="";
                     
                     
@@ -1205,7 +1205,7 @@ public int getLineColumnComponentsLenght(int line) {
                                        separatorIndexEnd = dataStringHolder.get(line).indexOf(separator,separatorIndexEnd+1); // get last point and move to anoter
                                        
 
-                                           if (separatorIndexEnd != -1) { //in any case if index range is to big when that will rezult in no string value
+                                           if (separatorIndexEnd != -1) { //in any case if indexStart range is to big when that will rezult in no string value
 
                                                  SeparatedText = dataStringHolder.get(line).substring( (separatorIndexStart == 0 ? separatorIndexStart : separatorIndexStart+1),separatorIndexEnd);
                                                
@@ -1215,7 +1215,7 @@ public int getLineColumnComponentsLenght(int line) {
                                                 }
                                          //        System.out.print(","+textIndex+": "+SeparatedText+ " ->math:"+(SeparatedText.compareTo(dataMath) == 0? "yes" : "no"));
                                                  
-                                                 if (SeparatedText.compareTo(dataMath) == 0 & index == textIndex){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath) == 0 & indexStart == textIndex){ // only save text when needet , zero point protection
                                                     return line;
                                                  }
 
@@ -1236,15 +1236,15 @@ public int getLineColumnComponentsLenght(int line) {
 /**
  * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.
  * Note: All Data Math should be in correct order to succeed a chain test.
- * @param startIndex Starting point where data should exist.
- * @param endIndex ending point where data should end.
+ * @param indexStart Starting point where data should exist.
+ * @param indexEnd ending point where data should end.
  * @param dataMath Data that math in specified range between starting point and ending point
  * @return Give data row when find full data collection. Else return -1.
  */
  
- public int getDataRowPosition( int startIndex, int endIndex, String ...dataMath )  { 
+ public int getDataRowPosition( int indexStart, int indexEnd, String ...dataMath )  { 
         
-        if  (startIndex >= endIndex) // Out of range 
+        if  (indexStart >= indexEnd) // Out of range 
   {
       System.err.println("getDataRowPosition int startIndex is to big.");
       return -1;
@@ -1278,12 +1278,12 @@ public int getLineColumnComponentsLenght(int line) {
                                                  
                                              //    System.out.print(",text index: "+textIndex+": data: ["+SeparatedText+ " == "+dataMath[countData]+" is same "+(SeparatedText.compareTo(dataMath[countData]) == 0? "..yes]" : ".no]"));
                                                   
-                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex > textIndex) ){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (indexStart <=textIndex & indexEnd > textIndex) ){ // only save text when needet , zero point protection
                                                     
                                                       
                                                      
                                                     // Dont go then max arguments.                 if arguments less then indexes range . Ignore. Especily when is fron 0 to 2 
-                                                     if(dataMath.length    >  countData & (endIndex-startIndex ) <= dataMath.length   ){
+                                                     if(dataMath.length    >  countData & (indexEnd-indexStart ) <= dataMath.length   ){
                                                       
                                                              countData++;
                                                      }
@@ -1295,13 +1295,13 @@ public int getLineColumnComponentsLenght(int line) {
                                            }
                                            
                                            
-                                           if (countData  == (endIndex-startIndex )    ) // return rezult find all values and registered as a cout
+                                           if (countData  == (indexEnd-indexStart )    ) // return rezult find all values and registered as a cout
                                            {
-                                        //       System.out.print("\n... [-N-->Data Count:"+countData +" Expected:> "+(endIndex-startIndex )+"]");
+                                        //       System.out.print("\n... [-N-->Data Count:"+countData +" Expected:> "+(indexEnd-indexStart )+"]");
                                                return line;
                                            }
                                            
-                                           if (textIndex > endIndex ) // stop looking after known max range 
+                                           if (textIndex > indexEnd ) // stop looking after known max range 
                                               break;  
                                    }
                           
@@ -1317,16 +1317,16 @@ public int getLineColumnComponentsLenght(int line) {
 /**
  * Obtain data existence from unknown line by defined index position where are compare whith  dataMath given value.
  * Note: All Data Math should be in correct order to succeed a chain test.
- * @param startIndex Starting point where data should exist.
- * @param endIndex ending point where data should end.
+ * @param indexStart Starting point where data should exist.
+ * @param indexEnd ending point where data should end.
  * @param dataMath Data that math in specified range between starting point and ending point
  * @param ignoreCasSensitive Ignore comparison of smaller or upper case.
  * @return Give data row when find full data collection. Else return -1.
  */
 
- public int getDataRowPosition( int startIndex, int endIndex,boolean ignoreCaseSensitive , String ...dataMath  )  { 
+ public int getDataRowPosition( int indexStart, int indexEnd,boolean ignoreCaseSensitive , String ...dataMath  )  { 
         
-     if  (startIndex >= endIndex) // Out of range 
+     if  (indexStart >= indexEnd) // Out of range 
   {
       System.err.println("getDataRowPosition int startIndex is to big.");
       return -1;
@@ -1368,12 +1368,12 @@ public int getLineColumnComponentsLenght(int line) {
                                                  
                                               //   System.out.print(",text index: "+textIndex+": data: ["+SeparatedText+ " == "+dataMath[countData]+" is same "+(SeparatedText.compareTo(dataMath[countData]) == 0? "..yes]" : ".no]"));
                                                   
-                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (startIndex <=textIndex & endIndex > textIndex) ){ // only save text when needet , zero point protection
+                                                 if (SeparatedText.compareTo(dataMath[countData]) == 0 & (indexStart <=textIndex & indexEnd > textIndex) ){ // only save text when needet , zero point protection
                                                     
                                                       
                                                      
                                                     // Dont go then max arguments.                 if arguments less then indexes range . Ignore. Especily when is fron 0 to 2 
-                                                     if(dataMath.length    >  countData & (endIndex-startIndex ) <= dataMath.length   ){
+                                                     if(dataMath.length    >  countData & (indexEnd-indexStart ) <= dataMath.length   ){
                                                       
                                                              countData++;
                                                      }
@@ -1385,13 +1385,13 @@ public int getLineColumnComponentsLenght(int line) {
                                            }
                                            
                                            
-                                           if (countData  == (endIndex-startIndex )    ) // return rezult find all values and registered as a cout
+                                           if (countData  == (indexEnd-indexStart )    ) // return rezult find all values and registered as a cout
                                            {
-                                            //   System.out.print("\n... [-N-->Data Count:"+countData +" Expected:> "+(endIndex-startIndex )+"]");
+                                            //   System.out.print("\n... [-N-->Data Count:"+countData +" Expected:> "+(indexEnd-indexStart )+"]");
                                                return line;
                                            }
                                            
-                                           if (textIndex > endIndex ) // stop looking after known max range 
+                                           if (textIndex > indexEnd ) // stop looking after known max range 
                                               break;  
                                    }
                           
