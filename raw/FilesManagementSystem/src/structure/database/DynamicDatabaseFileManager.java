@@ -3,8 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-
+package structure.database;
 
 
 /* Exsample How To Use It
@@ -22,10 +21,6 @@ reupload into class buffer use: fileManages.readInFileUpdater();
 
 
 
-
-package file.data.multilines.manager;
-
-
 //import java.io.*;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -37,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import java.util.Vector;
-import sun.security.util.Length;
 
 
 
@@ -56,11 +50,11 @@ import sun.security.util.Length;
  * @author      Firstname <@ zilvinus.peciulis@gmail.com>
  
  */
-public class StaticFileManager {
+public class DynamicDatabaseFileManager {
     
     private final String filename;
     private final static String separator ="~";//simbol of pointing separator 
-     private final static String zeroseparator ="_";//zero point separator use if no value is in get(0) position.
+    private final static String zeroseparator ="_";//zero point separator use if no value is in get(0) position.
     private final File fileSystem; // file check
     private FileWriter outputStream; 
     private BufferedWriter bufferWrite;
@@ -80,7 +74,7 @@ public class StaticFileManager {
   * @throws Throws about unable to create a file
   */
     
- public   StaticFileManager (String filename){
+ public   DynamicDatabaseFileManager (String filename){
        this.dataStringHolder = new Vector<>();
        this.filename = filename;
        fileSystem = new File(filename); // Create new file by path
@@ -1507,4 +1501,7 @@ public void displayDataMap()
 
 
 }
+
+
+
 
