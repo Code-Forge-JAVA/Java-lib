@@ -47,7 +47,7 @@ import java.util.Vector;
 // import statements
 
 /**
- * @author      Firstname <@ zilvinus.peciulis@gmail.com>
+ * @author   zilvinus.peciulis@gmail.com 
  
  */
 public class DynamicDatabaseFileManager {
@@ -71,7 +71,7 @@ public class DynamicDatabaseFileManager {
     
  /**
   * @param filename require to provide file name or full path of the file , also created a new file
-  * @throws Throws about unable to create a file
+  * //@throws Throws about unable to create a file
   */
     
  public   DynamicDatabaseFileManager (String filename){
@@ -595,6 +595,7 @@ public void setRowAppend (String ...multitext) {
  * @param uniqueIndexCompareStart From multitext list , is for avoid directly pointing range starts.
  * @param uniqueIndexCompareEnd From multitext list , is for avoid directly pointing range ends.
  * @param multitext Used to upload data.
+ * @param ignoreCaseSensitive Ignore comparison of smaller or upper case.
  * @return Give condition about successful uploading/pushing into buffer or file as boolean 
  */
 public boolean setRowAppend (int uniqueIndexCompareStart,int uniqueIndexCompareEnd,boolean ignoreCaseSensitive,String ...multitext) {
@@ -641,6 +642,7 @@ public boolean setRowRemove (int row) {
  * @param uniqueIndexCompareStart From multitext list , is for avoid range starts.
  * @param uniqueIndexCompareEnd From multitext list , is for avoid range ends.
  * @param multitext Used to find data.
+ * @param ignoreCaseSensitive Ignore comparison of smaller or upper case.
  * @return Give condition about successful remove from buffer or file as boolean
  */
 public boolean setRowRemove (int uniqueIndexCompareStart,int uniqueIndexCompareEnd,boolean ignoreCaseSensitive,String ...multitext) 
@@ -1320,7 +1322,7 @@ public int getLineColumnComponentsLenght(int line) {
  * @param indexStart Starting point where data should exist.
  * @param indexEnd ending point where data should end.
  * @param dataMath Data that math in specified range between starting point and ending point
- * @param ignoreCasSensitive Ignore comparison of smaller or upper case.
+ * @param ignoreCaseSensitive Ignore comparison of smaller or upper case.
  * @return Give data row when find full data collection. Else return -1.
  */
 
